@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const payload = {
-            username: "Applications LastWay",
+            username: "apps.lastway.ca",
             avatar_url: "https://r2.fivemanage.com/JslDOPFlC7vuh5WBc8xjk/lastway-white-removebg-preview.png",
             embeds: [embed]
         };
