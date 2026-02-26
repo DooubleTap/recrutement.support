@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const payload = {
             username: "Applications LastWay",
-            avatar_url: "https://r2.fivemanage.com/JslDOPFlC7vuh5WBc8xjk/Gemini_Generated_Image_rkc9darkc9darkc9.png",
+            avatar_url: "https://r2.fivemanage.com/JslDOPFlC7vuh5WBc8xjk/lastway-white-removebg-preview.png",
             embeds: [embed]
         };
 
