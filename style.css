@@ -1,14 +1,12 @@
 :root {
-    --primary: #4ade80;
-    /* Vert chaux/tactique */
-    --primary-glow: rgba(74, 222, 128, 0.4);
-    --secondary: #22c55e;
-    /* Vert forêt */
-    --bg-dark: #050705;
-    --panel-bg: rgba(10, 15, 10, 0.85);
-    --border-color: rgba(74, 222, 128, 0.2);
-    --text-main: #f0fdf4;
-    --text-muted: #86efac;
+    --primary: #e2e2e2;
+    --primary-glow: rgba(226, 226, 226, 0.4);
+    --secondary: #a0a0a0;
+    --bg-dark: #050505;
+    --panel-bg: rgba(10, 10, 10, 0.85);
+    --border-color: rgba(226, 226, 226, 0.2);
+    --text-main: #f5f5f5;
+    --text-muted: #a0a0a0;
     --glass-blur: blur(20px);
 }
 

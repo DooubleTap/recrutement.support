@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
             this.baseX = this.x;
             this.baseY = this.y;
             this.density = (Math.random() * 30) + 1;
-            this.color = '#4ade80';
+            this.color = '#fdfdfd';
         }
 
         draw() {
@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
     animate();
 
     // --- CONFIGURATION WEBHOOK ---
-    const WEBHOOK_URL = "https://discord.com/api/webhooks/1471142775452864606/YXDHKfdfDAXBiZcJ_fJ9r48_ymzweocUUX3ZTWP_dK9URxXW-vu1vY6TRdDbEeZihLLJ";
+    const WEBHOOK_URL = "https://discord.com/api/webhooks/1476521529146609815/0xzWZp25v6lvDutPiJ03_zWX616oZXzAVrLVj0sUQ5-4dMrZwAqAqel0lmM_ZgAXV3_O";
 
     async function sendApplication() {
         // Validation manuelle
@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (!anydeskVal) {
-            alert("⚠️ Veuillez sélectionner une option pour la maîtrise d'AnyDesk.");
+            alert("⚠️ Veuillez sélectionner une option pour la maîtrise de GitHub.");
             return;
         }
 
@@ -158,23 +158,23 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.querySelector('span').textContent = 'ENVOI EN COURS...';
 
         const embed = {
-            title: "📩 Nouvelle Candidature Support Vscript",
+            title: "📩 Nouvelle Candidature Support LastWay",
             color: 4873856,
             fields: [
                 { name: "👤 Identité", value: `**ID Discord:** <@${discord}>\n**Âge:** ${age} ans`, inline: true },
-                { name: "💻 Technique", value: `**Frameworks:** ${frameworks}\n**SQL:** ${sql}\n**AnyDesk:** ${anydeskVal}`, inline: false },
+                { name: "💻 Technique", value: `**Frameworks:** ${frameworks}\n**SQL:** ${sql}\n**GitHub:** ${anydeskVal}`, inline: false },
                 { name: "🛠️ Expérience Dev & Scripts", value: `**Développeur projet:** ${devExp}\n**Création scripts:** ${scripts}`, inline: false },
                 { name: "🤖 Utilisation IA", value: aiUsage, inline: false },
                 { name: "🤝 Relationnel & Motivations", value: `**Pédagogie:** ${pedagogie}\n**Motivations:** ${motivations}`, inline: false },
                 { name: "⚖️ Statut Bénévolat", value: "✅ Accepté", inline: true }
             ],
-            footer: { text: "Recrutement Vscript System" },
+            footer: { text: "Recrutement LastWay System" },
             timestamp: new Date().toISOString()
         };
 
         const payload = {
-            username: "Vscript Recruitment Bot",
-            avatar_url: "https://i.imgur.com/5Phbmw8.png",
+            username: "Applications LastWay",
+            avatar_url: "https://r2.fivemanage.com/JslDOPFlC7vuh5WBc8xjk/Gemini_Generated_Image_rkc9darkc9darkc9.png",
             embeds: [embed]
         };
 
