@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.querySelector('span').textContent = 'ENVOI EN COURS...';
 
         const embed = {
-            title: "📩 Nouvelle Candidature Support LastWay",
+            title: "📩 Nouvelle Candidature Support LastWay RP",
             color: 4873856,
             fields: [
                 { name: "👤 Identité", value: `**ID Discord:** <@${discord}> **Âge:** ${age} ans`, inline: true },
