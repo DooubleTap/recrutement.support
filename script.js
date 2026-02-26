@@ -161,15 +161,15 @@ document.addEventListener('DOMContentLoaded', () => {
             title: "📩 Nouvelle Candidature Support LastWay",
             color: 4873856,
             fields: [
-                { name: "👤 Identité", value: `**ID Discord:** <@${discord}>\n**Âge:** ${age} ans`, inline: true },
+                { name: "👤 Identité", value: `**ID Discord:** <@${discord}> **Âge:** ${age} ans`, inline: true },
                 { name: "💻 Technique", value: `**Frameworks:** ${frameworks}\n**SQL:** ${sql}\n**GitHub:** ${anydeskVal}`, inline: false },
                 { name: "🛠️ Expérience Dev & Scripts", value: `**Développeur projet:** ${devExp}\n**Création scripts:** ${scripts}`, inline: false },
                 { name: "🤖 Utilisation IA", value: aiUsage, inline: false },
-                { name: "🤝 Relationnel & Motivations", value: `**Pédagogie:** ${pedagogie}\n**Motivations:** ${motivations}`, inline: false },
+                { name: "🤝 Relationnel & Motivations", value: `**Mise en situation:** ${pedagogie}\n**Motivations:** ${motivations}`, inline: false },
                 { name: "⚖️ Statut Bénévolat", value: "✅ Accepté", inline: true }
             ],
-            footer: { text: "Recrutement LastWay System" },
-            timestamp: new Date().toISOString()
+            //footer: { text: "Recrutement LastWay System" },
+            //timestamp: new Date().toISOString()
         };
 
         const payload = {
