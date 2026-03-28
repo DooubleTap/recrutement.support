@@ -1,41 +1,67 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('recruitmentForm');
-    const submitBtn = document.getElementById('submitBtn');
     const toast = document.getElementById('toast');
 
-    // Custom Select Logic
-    const customSelect = document.getElementById('anydeskSelect');
-    const trigger = customSelect.querySelector('.select-trigger');
-    const options = customSelect.querySelector('.select-options');
-    const hiddenInput = document.getElementById('anydeskInput');
+    // =============================================
+    // NAVIGATION ENTRE PAGES
+    // =============================================
+    window.showForm = function(type) {
+        document.getElementById('landingPage').classList.add('hidden');
+        document.getElementById('staffForm').classList.add('hidden');
+        document.getElementById('devForm').classList.add('hidden');
 
-    trigger.addEventListener('click', () => {
-        customSelect.classList.toggle('active');
-    });
-
-    customSelect.querySelectorAll('.option').forEach(option => {
-        option.addEventListener('click', () => {
-            const value = option.dataset.value;
-            const text = option.textContent;
-
-            trigger.querySelector('span').textContent = text;
-            hiddenInput.value = value;
-
-            customSelect.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
-            option.classList.add('selected');
-
-            customSelect.classList.remove('active');
-        });
-    });
-
-    // Fermer le select si clic à l'extérieur
-    document.addEventListener('click', (e) => {
-        if (!customSelect.contains(e.target)) {
-            customSelect.classList.remove('active');
+        if (type === 'staff') {
+            document.getElementById('staffForm').classList.remove('hidden');
+            document.getElementById('pageSubtitle').textContent = 'Application Staff';
+        } else if (type === 'dev') {
+            document.getElementById('devForm').classList.remove('hidden');
+            document.getElementById('pageSubtitle').textContent = 'Application Dev';
         }
-    });
 
-    // PARTICLE SYSTEM (CANVAS)
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.showLanding = function() {
+        document.getElementById('staffForm').classList.add('hidden');
+        document.getElementById('devForm').classList.add('hidden');
+        document.getElementById('landingPage').classList.remove('hidden');
+        document.getElementById('pageSubtitle').textContent = 'Recrutement LastWay';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    // =============================================
+    // CUSTOM SELECT — DEV FORM
+    // =============================================
+    const devGithubSelect = document.getElementById('devGithubSelect');
+    if (devGithubSelect) {
+        const trigger = devGithubSelect.querySelector('.select-trigger');
+        const devGithubInput = document.getElementById('devGithubInput');
+
+        trigger.addEventListener('click', () => {
+            devGithubSelect.classList.toggle('active');
+        });
+
+        devGithubSelect.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', () => {
+                const value = option.dataset.value;
+                const text = option.textContent;
+                trigger.querySelector('span').textContent = text;
+                devGithubInput.value = value;
+                devGithubSelect.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+                devGithubSelect.classList.remove('active');
+            });
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!devGithubSelect.contains(e.target)) {
+                devGithubSelect.classList.remove('active');
+            }
+        });
+    }
+
+    // =============================================
+    // PARTICLE SYSTEM
+    // =============================================
     const canvas = document.getElementById('particleCanvas');
     const ctx = canvas.getContext('2d');
     let particlesArray = [];
@@ -46,8 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
         mouse.y = event.y;
     });
 
-    // IMPORTANT : La classe Particle DOIT être déclarée AVANT d'être utilisée
-    // (les classes JS ne sont pas hoistées comme les fonctions)
     class Particle {
         constructor() {
             this.x = Math.random() * canvas.width;
@@ -83,12 +107,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.y -= directionY;
             } else {
                 if (this.x !== this.baseX) {
-                    let dx = this.x - this.baseX;
-                    this.x -= dx / 10;
+                    this.x -= (this.x - this.baseX) / 10;
                 }
                 if (this.y !== this.baseY) {
-                    let dy = this.y - this.baseY;
-                    this.y -= dy / 10;
+                    this.y -= (this.y - this.baseY) / 10;
                 }
             }
         }
@@ -108,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
         initParticles();
     }
     window.addEventListener('resize', resizeCanvas);
-    resizeCanvas(); // Maintenant safe : Particle est déjà déclarée
+    resizeCanvas();
 
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -120,58 +142,110 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     animate();
 
-    // --- CONFIGURATION WEBHOOK ---
-    const WEBHOOK_URL = "https://discord.com/api/webhooks/1476521529146609815/0xzWZp25v6lvDutPiJ03_zWX616oZXzAVrLVj0sUQ5-4dMrZwAqAqel0lmM_ZgAXV3_O";
+    // =============================================
+    // CONFIGURATION WEBHOOKS
+    // =============================================
+    const WEBHOOK_STAFF = "https://discord.com/api/webhooks/1476521529146609815/0xzWZp25v6lvDutPiJ03_zWX616oZXzAVrLVj0sUQ5-4dMrZwAqAqel0lmM_ZgAXV3_O";
+    const WEBHOOK_DEV   = "https://discord.com/api/webhooks/1476521529146609815/0xzWZp25v6lvDutPiJ03_zWX616oZXzAVrLVj0sUQ5-4dMrZwAqAqel0lmM_ZgAXV3_O"; // Remplacer par le webhook Dev si différent
 
-    async function sendApplication() {
-        // Validation manuelle
-        const discord = document.getElementById('discord').value.trim();
-        const age = document.getElementById('age').value.trim();
-        const frameworks = document.getElementById('frameworks').value.trim();
-        const sql = document.getElementById('sql').value.trim();
-        const devExp = document.getElementById('devExp').value.trim();
-        const scripts = document.getElementById('scripts').value.trim();
-        const aiUsage = document.getElementById('aiUsage').value.trim();
-        const anydeskVal = document.getElementById('anydeskInput').value;
-        const pedagogie = document.getElementById('pedagogie').value.trim();
-        const motivations = document.getElementById('motivations').value.trim();
-        const benevolat = document.getElementById('benevolat').checked;
+    // =============================================
+    // ENVOI — APPLICATION STAFF
+    // =============================================
+    async function sendStaffApplication() {
+        const discord       = document.getElementById('staff_discord').value.trim();
+        const age           = document.getElementById('staff_age').value.trim();
+        const experience    = document.getElementById('staff_experience').value.trim();
+        const pedagogie     = document.getElementById('staff_pedagogie').value.trim();
+        const conflict      = document.getElementById('staff_conflict').value.trim();
+        const disponibilite = document.getElementById('staff_disponibilite').value.trim();
+        const motivations   = document.getElementById('staff_motivations').value.trim();
+        const confirm       = document.getElementById('staff_confirm').checked;
+        const btn           = document.getElementById('staffSubmitBtn');
 
-        if (!discord || !age || !frameworks || !sql || !devExp || !scripts || !aiUsage || !pedagogie || !motivations) {
+        if (!discord || !age || !experience || !pedagogie || !conflict || !disponibilite || !motivations) {
             alert("⚠️ Veuillez remplir tous les champs du formulaire.");
             return;
         }
-
-        if (!anydeskVal) {
-            alert("⚠️ Veuillez sélectionner une option pour la maîtrise de GitHub.");
+        if (!confirm) {
+            alert("⚠️ Veuillez cocher la case de confirmation avant d'envoyer.");
             return;
         }
 
-        if (!benevolat) {
-            alert("⚠️ Veuillez accepter le statut bénévole pour continuer.");
-            return;
-        }
-
-        // Animation bouton
-        submitBtn.disabled = true;
-        const originalText = submitBtn.querySelector('span').textContent;
-        submitBtn.querySelector('span').textContent = 'ENVOI EN COURS...';
+        btn.disabled = true;
+        btn.querySelector('span').textContent = 'ENVOI EN COURS...';
 
         const embed = {
-            title: "📩 Nouvelle Candidature Support LastWay RP",
-            color: 4873856,
+            title: "📋 Nouvelle Candidature STAFF — LastWay",
+            color: 3066993, // Vert
             fields: [
-                { name: "👤 Identité", value: `**ID Discord:** <@${discord}> **Âge:** ${age} ans`, inline: true },
-                { name: "💻 Technique", value: `**Frameworks:** ${frameworks}\n**SQL:** ${sql}\n**GitHub:** ${anydeskVal}`, inline: false },
-                { name: "🛠️ Expérience Dev & Scripts", value: `**Développeur projet:** ${devExp}\n**Création scripts:** ${scripts}`, inline: false },
-                { name: "🤖 Utilisation IA", value: aiUsage, inline: false },
-                { name: "🤝 Relationnel & Motivations", value: `**Mise en situation:** ${pedagogie}\n**Motivations:** ${motivations}`, inline: false },
-                { name: "⚖️ Statut Bénévolat", value: "✅ Accepté", inline: true }
-            ],
-            //footer: { text: "Recrutement LastWay System" },
-            //timestamp: new Date().toISOString()
+                { name: "👤 Identité",          value: `**ID Discord:** <@${discord}>\n**Âge:** ${age} ans`,                         inline: false },
+                { name: "🏆 Expérience Staff",  value: experience,                                                                   inline: false },
+                { name: "📚 Pédagogie",         value: pedagogie,                                                                    inline: false },
+                { name: "⚡ Gestion conflits",  value: conflict,                                                                     inline: false },
+                { name: "🕐 Disponibilités",    value: disponibilite,                                                                inline: true  },
+                { name: "🎯 Motivations",       value: motivations,                                                                  inline: false },
+                { name: "⚖️ Confirmation",      value: "✅ Accepté",                                                                 inline: true  }
+            ]
         };
 
+        await submitToDiscord(WEBHOOK_STAFF, embed, btn, "ENVOYER LA CANDIDATURE STAFF", document.getElementById('staffForm'));
+    }
+
+    // =============================================
+    // ENVOI — APPLICATION DEV
+    // =============================================
+    async function sendDevApplication() {
+        const discord     = document.getElementById('dev_discord').value.trim();
+        const age         = document.getElementById('dev_age').value.trim();
+        const frameworks  = document.getElementById('dev_frameworks').value.trim();
+        const sql         = document.getElementById('dev_sql').value.trim();
+        const devExp      = document.getElementById('dev_devExp').value.trim();
+        const scripts     = document.getElementById('dev_scripts').value.trim();
+        const aiUsage     = document.getElementById('dev_aiUsage').value.trim();
+        const githubVal   = document.getElementById('devGithubInput').value;
+        const motivations = document.getElementById('dev_motivations').value.trim();
+        const confirm     = document.getElementById('dev_confirm').checked;
+        const btn         = document.getElementById('devSubmitBtn');
+
+        if (!discord || !age || !frameworks || !sql || !devExp || !scripts || !aiUsage || !motivations) {
+            alert("⚠️ Veuillez remplir tous les champs du formulaire.");
+            return;
+        }
+        if (!githubVal) {
+            alert("⚠️ Veuillez sélectionner votre niveau de maîtrise GitHub.");
+            return;
+        }
+        if (!confirm) {
+            alert("⚠️ Veuillez cocher la case de confirmation avant d'envoyer.");
+            return;
+        }
+
+        btn.disabled = true;
+        btn.querySelector('span').textContent = 'ENVOI EN COURS...';
+
+        const embed = {
+            title: "💻 Nouvelle Candidature DEV — LastWay",
+            color: 5793266, // Bleu
+            fields: [
+                { name: "👤 Identité",              value: `**ID Discord:** <@${discord}>\n**Âge:** ${age} ans`,                              inline: false },
+                { name: "💻 Frameworks",            value: frameworks,                                                                         inline: false },
+                { name: "🗄️ SQL / DB",              value: sql,                                                                                inline: false },
+                { name: "🛠️ Expérience Dev",        value: devExp,                                                                             inline: false },
+                { name: "📦 Scripts créés",         value: scripts,                                                                            inline: false },
+                { name: "🤖 Utilisation IA",        value: aiUsage,                                                                            inline: false },
+                { name: "🐙 GitHub",                value: githubVal,                                                                          inline: true  },
+                { name: "🎯 Motivations",           value: motivations,                                                                        inline: false },
+                { name: "⚖️ Confirmation",          value: "✅ Accepté",                                                                       inline: true  }
+            ]
+        };
+
+        await submitToDiscord(WEBHOOK_DEV, embed, btn, "ENVOYER LA CANDIDATURE DEV", document.getElementById('devForm'));
+    }
+
+    // =============================================
+    // HELPER — Envoi Discord commun
+    // =============================================
+    async function submitToDiscord(webhookUrl, embed, btn, originalLabel, form) {
         const payload = {
             username: "apps.lastway.ca",
             avatar_url: "https://r2.fivemanage.com/JslDOPFlC7vuh5WBc8xjk/lastway-white-removebg-preview.png",
@@ -179,7 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         try {
-            const response = await fetch(WEBHOOK_URL, {
+            const response = await fetch(webhookUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
@@ -188,8 +262,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (response.ok) {
                 showToast('Votre candidature a été envoyée avec succès !');
                 form.reset();
-                trigger.querySelector('span').textContent = "Sélectionnez une option";
-                document.getElementById('anydeskInput').value = "";
+                // Reset custom selects
+                const selectTrigger = form.querySelector('.select-trigger span');
+                if (selectTrigger) selectTrigger.textContent = 'Sélectionnez une option';
+                const hiddenInput = form.querySelector('input[type="hidden"]');
+                if (hiddenInput) hiddenInput.value = '';
             } else {
                 alert("Erreur Discord : " + response.status);
             }
@@ -197,11 +274,14 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error(error);
             alert("Erreur d'envoi : " + error.message);
         } finally {
-            submitBtn.disabled = false;
-            submitBtn.querySelector('span').textContent = originalText;
+            btn.disabled = false;
+            btn.querySelector('span').textContent = originalLabel;
         }
     }
 
+    // =============================================
+    // TOAST
+    // =============================================
     function showToast(message, type = 'success') {
         toast.textContent = message;
         toast.className = `toast ${type}`;
@@ -210,8 +290,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 5000);
     }
 
-    // Click handler direct (pas de form submit)
-    submitBtn.addEventListener('click', () => {
-        sendApplication();
-    });
+    // =============================================
+    // CLICK HANDLERS
+    // =============================================
+    document.getElementById('staffSubmitBtn').addEventListener('click', sendStaffApplication);
+    document.getElementById('devSubmitBtn').addEventListener('click', sendDevApplication);
 });

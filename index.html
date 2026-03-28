@@ -4,11 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recrutement Support - LastWay</title>
+    <title>Recrutement - LastWay</title>
     <link rel="stylesheet" href="style.css">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@400;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -16,21 +14,46 @@
         <canvas id="particleCanvas"></canvas>
         <div class="scanlines"></div>
     </div>
+
     <main class="container">
         <header class="header">
             <img src="https://r2.fivemanage.com/JslDOPFlC7vuh5WBc8xjk/lastway-white-removebg-preview.png" alt="LastWay Logo" class="logo">
-            <p class="subtitle">Application Staff pour LastWay</p>
+            <p class="subtitle" id="pageSubtitle">Recrutement LastWay</p>
         </header>
 
-        <form id="recruitmentForm" class="glass-panel">
+        <!-- ===== PAGE D'ACCUEIL ===== -->
+        <div id="landingPage" class="landing-page">
+            <p class="landing-intro">Choisissez le type de poste pour lequel vous souhaitez postuler :</p>
+            <div class="choice-grid">
+                <button class="choice-card" id="btnStaff" onclick="showForm('staff')">
+                    <div class="choice-icon">📋</div>
+                    <div class="choice-label">Application Staff</div>
+                    <div class="choice-desc">Support joueurs, tickets, événements et gestion communautaire.</div>
+                    <div class="choice-arrow">→</div>
+                    <div class="card-glow"></div>
+                </button>
+                <button class="choice-card" id="btnDev" onclick="showForm('dev')">
+                    <div class="choice-icon">💻</div>
+                    <div class="choice-label">Application Dev</div>
+                    <div class="choice-desc">Développement de scripts, maintenance technique et QBCore.</div>
+                    <div class="choice-arrow">→</div>
+                    <div class="card-glow"></div>
+                </button>
+            </div>
+        </div>
+
+        <!-- ===== FORMULAIRE STAFF ===== -->
+        <form id="staffForm" class="glass-panel recruitment-form hidden" novalidate>
+            <button type="button" class="back-btn" onclick="showLanding()">← Retour</button>
+
             <section class="form-section info-section">
-                <h2><i class="icon">📋</i> Tâches attendues</h2>
+                <h2><i class="icon">📋</i> Tâches attendues — Staff</h2>
                 <ul class="task-list">
                     <li>Répondre aux tickets de manière polie en respectant toujours le joueur.</li>
                     <li>Renommer les tickets et savoir les mettre dans les bonnes catégories.</li>
                     <li>Savoir essayer de résoudre un problème par ses propres moyens ou en demandant de l'aide à l'équipe.</li>
                     <li>Participer aux événements le plus possible.</li>
-                    <li>Savoir être patient, prendre le temps avec un client qui ne comprend pas, explication vocal si besoin.</li>
+                    <li>Savoir être patient, prendre le temps avec un client qui ne comprend pas — explication vocale si besoin.</li>
                     <li>Le travail communautaire peut devenir redondant et répétitif, il faut s'y attendre.</li>
                 </ul>
             </section>
@@ -38,79 +61,136 @@
             <section class="form-section">
                 <h2><i class="icon">👤</i> Identité</h2>
                 <div class="input-group">
-                    <label for="discord">ID Discord </br>(Discord > Paramètres > Avancé > Mode Dévelopeur. Clique droit sur votre user > Copier l'Identifiant)</label>
-                    <input type="text" id="discord" name="discord" placeholder="Exemple: 76182535192715264">
+                    <label for="staff_discord">ID Discord<br><small>(Discord → Paramètres → Avancé → Mode Développeur. Clic droit sur votre user → Copier l'Identifiant)</small></label>
+                    <input type="text" id="staff_discord" name="discord" placeholder="Exemple: 76182535192715264">
                 </div>
                 <div class="input-group">
-                    <label for="age">Votre âge IRL</label>
-                    <input type="number" id="age" name="age" min="18" max="99">
-                </div>
-            </section>
-
-            <section class="form-section">
-                <h2><i class="icon">💻</i> Compétences Techniques</h2>
-                <div class="input-group">
-                    <label for="frameworks">Expérience avec le framework QBCore et ox_inventory</label>
-                    <textarea id="frameworks" name="frameworks" rows="3"
-                        placeholder="Quels frameworks maîtrisez-vous et quel est votre niveau ?"></textarea>
-                </div>
-                <div class="input-group">
-                    <label for="sql">Connaissances en SQL / Bases de données</label>
-                    <textarea id="sql" name="sql" rows="2" placeholder="Savez-vous gérer une DB FiveM ?"></textarea>
-                </div>
-                <div class="input-group">
-                    <label for="devExp">Avez-vous déjà été développeur sur un projet ?</label>
-                    <textarea id="devExp" name="devExp" rows="2" placeholder="Si oui, lequel ?"></textarea>
-                </div>
-                <div class="input-group">
-                    <label for="scripts">Avez-vous déjà créé vos propres scripts ?</label>
-                    <textarea id="scripts" name="scripts" rows="2" placeholder="Détaillez vos créations... (liens si possible)"></textarea>
-                </div>
-                <div class="input-group">
-                    <label for="aiUsage">Utilisez-vous l'IA dans votre travail ? (Ce n'est pas un motif de refus, l'intelligence artifficiel est vraiment utile)</label>
-                    <textarea id="aiUsage" name="aiUsage" rows="2"
-                        placeholder="Détaillez votre utilisation..."></textarea>
-                </div>
-                <div class="input-group">
-                    <label>Maîtrise de GitHub (Pour application Dev)</label>
-                    <div class="custom-select" id="anydeskSelect">
-                        <div class="select-trigger">
-                            <span>Sélectionnez une option (meme si non applicable)</span>
-                            <i class="arrow">▼</i>
-                        </div>
-                        <div class="select-options">
-                            <div class="option" data-value="expert">Expert</div>
-                            <div class="option" data-value="intermediaire">Intermédiaire (Je connais les bases)</div>
-                            <div class="option" data-value="debutant">Débutant (Ou non applicable)</div>
-                        </div>
-                        <input type="hidden" name="anydesk" id="anydeskInput">
-                    </div>
+                    <label for="staff_age">Votre âge IRL</label>
+                    <input type="number" id="staff_age" name="age" min="18" max="99">
                 </div>
             </section>
 
             <section class="form-section">
                 <h2><i class="icon">🤝</i> Aptitudes & Engagement</h2>
                 <div class="input-group">
-                    <label for="pedagogie">Capacité à expliquer et aider les joueurs</label>
-                    <textarea id="pedagogie" name="pedagogie" rows="3"
-                        placeholder="Comment gérez-vous un joueur qui ne comprend pas ?"></textarea>
+                    <label for="staff_experience">Avez-vous déjà été Staff sur un autre serveur ?</label>
+                    <textarea id="staff_experience" name="experience" rows="3" placeholder="Si oui, décrivez votre expérience et votre rôle..."></textarea>
                 </div>
                 <div class="input-group">
-                    <label for="motivations">Vos motivations</label>
-                    <textarea id="motivations" name="motivations" rows="4"
-                        placeholder="Pourquoi vous et pas un autre ?"></textarea>
+                    <label for="staff_pedagogie">Capacité à expliquer et aider les joueurs</label>
+                    <textarea id="staff_pedagogie" name="pedagogie" rows="3" placeholder="Comment gérez-vous un joueur qui ne comprend pas ?"></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="staff_conflict">Gestion de conflits</label>
+                    <textarea id="staff_conflict" name="conflict" rows="3" placeholder="Comment réagissez-vous face à un joueur agressif ou de mauvaise foi ?"></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="staff_disponibilite">Disponibilités approximatives</label>
+                    <textarea id="staff_disponibilite" name="disponibilite" rows="2" placeholder="Heures par semaine, soirs, fins de semaine..."></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="staff_motivations">Vos motivations</label>
+                    <textarea id="staff_motivations" name="motivations" rows="4" placeholder="Pourquoi vous et pas un autre ?"></textarea>
                 </div>
                 <div class="input-group checkbox-group">
                     <label class="custom-checkbox-container">
-                        <input type="checkbox" id="benevolat" name="benevolat">
+                        <input type="checkbox" id="staff_confirm" name="confirm">
                         <span class="checkmark"></span>
-                        <span class="checkbox-text">Je confirme de ne pas avoir écris d'informations personel dans ce formulaire!</span>
+                        <span class="checkbox-text">Je confirme de ne pas avoir écrit d'informations personnelles dans ce formulaire!</span>
                     </label>
                 </div>
             </section>
 
-            <button type="button" id="submitBtn" class="primary-btn">
-                <span>ENVOYER LA CANDIDATURE</span>
+            <button type="button" id="staffSubmitBtn" class="primary-btn">
+                <span>ENVOYER LA CANDIDATURE STAFF</span>
+                <div class="btn-glow"></div>
+            </button>
+        </form>
+
+        <!-- ===== FORMULAIRE DEV ===== -->
+        <form id="devForm" class="glass-panel recruitment-form hidden" novalidate>
+            <button type="button" class="back-btn" onclick="showLanding()">← Retour</button>
+
+            <section class="form-section info-section">
+                <h2><i class="icon">💻</i> Tâches attendues — Développeur</h2>
+                <ul class="task-list">
+                    <li>Développer, modifier et maintenir des scripts FiveM (Lua, JS, SQL).</li>
+                    <li>Travailler avec le framework QBCore et ox_inventory.</li>
+                    <li>Respecter les conventions de code de l'équipe et documenter son travail.</li>
+                    <li>Utiliser Git / GitHub pour gérer les versions et les déploiements.</li>
+                    <li>Communiquer avec l'équipe Staff pour comprendre les besoins des joueurs.</li>
+                    <li>Faire preuve d'autonomie et savoir prioriser les tâches critiques.</li>
+                </ul>
+            </section>
+
+            <section class="form-section">
+                <h2><i class="icon">👤</i> Identité</h2>
+                <div class="input-group">
+                    <label for="dev_discord">ID Discord<br><small>(Discord → Paramètres → Avancé → Mode Développeur. Clic droit sur votre user → Copier l'Identifiant)</small></label>
+                    <input type="text" id="dev_discord" name="discord" placeholder="Exemple: 76182535192715264">
+                </div>
+                <div class="input-group">
+                    <label for="dev_age">Votre âge IRL</label>
+                    <input type="number" id="dev_age" name="age" min="18" max="99">
+                </div>
+            </section>
+
+            <section class="form-section">
+                <h2><i class="icon">🛠️</i> Compétences Techniques</h2>
+                <div class="input-group">
+                    <label for="dev_frameworks">Expérience avec le framework QBCore et ox_inventory</label>
+                    <textarea id="dev_frameworks" name="frameworks" rows="3" placeholder="Quels frameworks maîtrisez-vous et quel est votre niveau ?"></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="dev_sql">Connaissances en SQL / Bases de données</label>
+                    <textarea id="dev_sql" name="sql" rows="2" placeholder="Savez-vous gérer une DB FiveM ?"></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="dev_devExp">Avez-vous déjà été développeur sur un projet ?</label>
+                    <textarea id="dev_devExp" name="devExp" rows="2" placeholder="Si oui, lequel ?"></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="dev_scripts">Avez-vous déjà créé vos propres scripts ?</label>
+                    <textarea id="dev_scripts" name="scripts" rows="2" placeholder="Détaillez vos créations... (liens si possible)"></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="dev_aiUsage">Utilisez-vous l'IA dans votre travail ? <small>(Ce n'est pas un motif de refus)</small></label>
+                    <textarea id="dev_aiUsage" name="aiUsage" rows="2" placeholder="Détaillez votre utilisation..."></textarea>
+                </div>
+                <div class="input-group">
+                    <label>Maîtrise de GitHub</label>
+                    <div class="custom-select" id="devGithubSelect">
+                        <div class="select-trigger">
+                            <span>Sélectionnez une option</span>
+                            <i class="arrow">▼</i>
+                        </div>
+                        <div class="select-options">
+                            <div class="option" data-value="expert">Expert</div>
+                            <div class="option" data-value="intermediaire">Intermédiaire (Je connais les bases)</div>
+                            <div class="option" data-value="debutant">Débutant</div>
+                        </div>
+                        <input type="hidden" name="github" id="devGithubInput">
+                    </div>
+                </div>
+            </section>
+
+            <section class="form-section">
+                <h2><i class="icon">🤝</i> Motivation</h2>
+                <div class="input-group">
+                    <label for="dev_motivations">Vos motivations</label>
+                    <textarea id="dev_motivations" name="motivations" rows="4" placeholder="Pourquoi vous et pas un autre ?"></textarea>
+                </div>
+                <div class="input-group checkbox-group">
+                    <label class="custom-checkbox-container">
+                        <input type="checkbox" id="dev_confirm" name="confirm">
+                        <span class="checkmark"></span>
+                        <span class="checkbox-text">Je confirme de ne pas avoir écrit d'informations personnelles dans ce formulaire!</span>
+                    </label>
+                </div>
+            </section>
+
+            <button type="button" id="devSubmitBtn" class="primary-btn">
+                <span>ENVOYER LA CANDIDATURE DEV</span>
                 <div class="btn-glow"></div>
             </button>
         </form>
@@ -119,6 +199,7 @@
             &copy; 2026 LastWay - Tous droits réservés
         </footer>
     </main>
+
     <div id="toast" class="toast hidden"></div>
     <script src="script.js"></script>
 </body>
