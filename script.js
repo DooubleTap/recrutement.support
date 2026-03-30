@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.querySelector('span').textContent = 'ENVOI EN COURS...';
 
         const embed = {
-            title : "🛃 Nouvelle Douane — LastWay",
+            title : "🛃 Formulaire - `<@${discord}>`",
             color : 16753920, // Orange
             fields: [
                 { name: "👤 Identité",                        value: `**ID Discord:** <@${discord}>\n**Âge:** ${age} ans`,       inline: false },
@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 { name: "📖 PowerGaming & MetaGaming",        value: regles,                                                      inline: false },
                 { name: "🧬 Histoire du personnage",           value: perso,                                                       inline: false },
                 { name: "🎯 Buts en ville (court/long terme)", value: buts,                                                        inline: false },
-                { name: "✅ Confirmation",                    value: "Le joueur confirme ne pas pinger le staff.",                inline: true  }
+                { name: "✅ Confirmation",                    value: "Le joueur a cocher la case!",                             inline: true  }
             ],
             footer: { text: `ID Discord: ${discord}` },
             timestamp: new Date().toISOString()
