@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.querySelector('span').textContent = 'ENVOI EN COURS...';
 
         const embed = {
-            title : `🛃 Nouvelle Douane — ${discord}`,
+            title : `🛃 Nouvelle Douane — <@${discord}>`,
             color : 16753920, // Orange
             fields: [
                 { name: "👤 Identité",                        value: `**ID Discord:** <@${discord}>\n**Âge:** ${age} ans`,       inline: false },
