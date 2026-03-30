@@ -269,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
             timestamp: new Date().toISOString()
         };
 
-        await submitToDiscord(WEBHOOK_DOUANE, embed, btn, "ENVOYER LE FORMULAIRE DE DOUANE", document.getElementById('douaneForm'));
+        await submitToDiscord(WEBHOOK_DOUANE, embed, btn, "ENVOYER LE FORMULAIRE DE DOUANE", document.getElementById('douaneForm'), discord);
     }
 
     // =============================================
@@ -312,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ]
         };
 
-        await submitToDiscord(WEBHOOK_STAFF, embed, btn, "ENVOYER LA CANDIDATURE STAFF", document.getElementById('staffForm'));
+        await submitToDiscord(WEBHOOK_STAFF, embed, btn, "ENVOYER LA CANDIDATURE STAFF", document.getElementById('staffForm'), discord);
     }
 
     // =============================================
@@ -363,13 +363,13 @@ document.addEventListener('DOMContentLoaded', () => {
             ]
         };
 
-        await submitToDiscord(WEBHOOK_DEV, embed, btn, "ENVOYER LA CANDIDATURE DEV", document.getElementById('devForm'));
+        await submitToDiscord(WEBHOOK_DEV, embed, btn, "ENVOYER LA CANDIDATURE DEV", document.getElementById('devForm'), discord);
     }
 
     // =============================================
     // HELPER — Envoi Discord
     // =============================================
-    async function submitToDiscord(webhookUrl, embed, btn, originalLabel, form) {
+    async function submitToDiscord(webhookUrl, embed, btn, originalLabel, form, discordId = null) {
         // Extraire le type depuis l'URL du webhook (on passe maintenant par /api/submit)
         const typeMap = {
             [WEBHOOK_DOUANE]: 'douane',
@@ -389,7 +389,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('/api/submit', {
                 method : 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body   : JSON.stringify({ type, turnstileToken, embed })
+                body   : JSON.stringify({ type, turnstileToken, embed, discordId })
             });
 
             if (response.ok) {
