@@ -45,28 +45,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!counter || !fill) return;
 
-            ta.addEventListener('input', () => {
+            function updateCounter() {
+                // Tronquer AVANT de lire la longueur (couvre paste, drag-drop, etc.)
+                if (ta.value.length > max) {
+                    const pos = ta.selectionStart;
+                    ta.value = ta.value.slice(0, max);
+                    ta.selectionStart = ta.selectionEnd = Math.min(pos, max);
+                }
                 const len = ta.value.length;
+                const remaining = max - len;
                 counter.textContent = `${len} / ${max}`;
+
+                // Couleur du compteur selon proximité du max
+                if (remaining <= 0) {
+                    counter.style.color = '#e74c3c';
+                } else if (remaining <= 20) {
+                    counter.style.color = '#f39c12';
+                } else if (len < min) {
+                    counter.style.color = '#e74c3c';
+                } else {
+                    counter.style.color = '#4ade80';
+                }
 
                 // Barre de progression
                 const pct = Math.min((len / max) * 100, 100);
                 fill.style.width = pct + '%';
-
-                // Couleur selon si le minimum est atteint
                 if (len < min) {
                     fill.style.background = '#e74c3c';
-                    counter.style.color = '#e74c3c';
+                } else if (remaining <= 20) {
+                    fill.style.background = '#f39c12';
                 } else {
                     fill.style.background = '#3a7d44';
-                    counter.style.color = '#4ade80';
                 }
+            }
 
-                // Limite max
-                if (len >= max) {
-                    ta.value = ta.value.slice(0, max);
-                }
-            });
+            ta.addEventListener('input',     updateCounter);
+            ta.addEventListener('paste',     () => setTimeout(updateCounter, 0));
+            ta.addEventListener('drop',      () => setTimeout(updateCounter, 0));
+            ta.addEventListener('keydown',   updateCounter);
         });
     }
     initCharCounters();
