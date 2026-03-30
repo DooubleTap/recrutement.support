@@ -2,6 +2,38 @@ document.addEventListener('DOMContentLoaded', () => {
     const toast = document.getElementById('toast');
 
     // =============================================
+    // TURNSTILE
+    // =============================================
+    let turnstileToken = null;
+
+    window.onTurnstileSuccess = function(token) {
+        turnstileToken = token;
+        // Activer les cartes
+        document.querySelectorAll('.choice-card').forEach(c => {
+            c.classList.remove('choice-card-locked');
+            c.removeAttribute('disabled');
+        });
+        document.getElementById('turnstileHint').textContent = '✅ Vérification réussie — choisissez votre formulaire.';
+        document.getElementById('turnstileHint').style.color = '#4ade80';
+    };
+
+    window.onTurnstileExpire = function() {
+        turnstileToken = null;
+        document.querySelectorAll('.choice-card').forEach(c => {
+            c.classList.add('choice-card-locked');
+            c.setAttribute('disabled', 'disabled');
+        });
+        document.getElementById('turnstileHint').textContent = '⚠️ Vérification expirée — veuillez recommencer.';
+        document.getElementById('turnstileHint').style.color = '#f39c12';
+    };
+
+    // Bloquer les cartes au chargement (avant Turnstile)
+    document.querySelectorAll('.choice-card').forEach(c => {
+        c.classList.add('choice-card-locked');
+        c.setAttribute('disabled', 'disabled');
+    });
+
+    // =============================================
     // NAVIGATION
     // =============================================
     window.showForm = function(type) {
@@ -338,17 +370,26 @@ document.addEventListener('DOMContentLoaded', () => {
     // HELPER — Envoi Discord
     // =============================================
     async function submitToDiscord(webhookUrl, embed, btn, originalLabel, form) {
-        const payload = {
-            username  : "apps.lastway.ca",
-            avatar_url: "https://r2.fivemanage.com/JslDOPFlC7vuh5WBc8xjk/lastway-white-removebg-preview.png",
-            embeds    : [embed]
+        // Extraire le type depuis l'URL du webhook (on passe maintenant par /api/submit)
+        const typeMap = {
+            [WEBHOOK_DOUANE]: 'douane',
+            [WEBHOOK_STAFF]:  'staff',
+            [WEBHOOK_DEV]:    'dev',
         };
+        const type = typeMap[webhookUrl] || 'douane';
+
+        if (!turnstileToken) {
+            alert('⚠️ Vérification anti-bot manquante. Retournez à l\'accueil et complétez le widget.');
+            btn.disabled = false;
+            btn.querySelector('span').textContent = originalLabel;
+            return;
+        }
 
         try {
-            const response = await fetch(webhookUrl, {
+            const response = await fetch('/api/submit', {
                 method : 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body   : JSON.stringify(payload)
+                body   : JSON.stringify({ type, turnstileToken, embed })
             });
 
             if (response.ok) {
@@ -362,6 +403,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     c.style.color = '';
                 });
                 form.querySelectorAll('.char-fill').forEach(f => { f.style.width = '0%'; });
+                // Reset Turnstile (token usage unique)
+                turnstileToken = null;
+                if (window.turnstile) window.turnstile.reset();
+                document.querySelectorAll('.choice-card').forEach(c => {
+                    c.classList.add('choice-card-locked');
+                    c.setAttribute('disabled', 'disabled');
+                });
+                document.getElementById('turnstileHint').textContent = 'Complétez la vérification ci-dessus pour accéder aux formulaires.';
+                document.getElementById('turnstileHint').style.color = '';
+                showLanding();
                 // Reset custom selects
                 const trigger = form.querySelector('.select-trigger span');
                 if (trigger) trigger.textContent = 'Sélectionnez une option';
