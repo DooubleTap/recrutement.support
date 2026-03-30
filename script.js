@@ -207,7 +207,6 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.querySelector('span').textContent = 'ENVOI EN COURS...';
 
         const embed = {
-            title : `🛃 Nouvelle Douane — <@${discord}>`,
             color : 16753920, // Orange
             fields: [
                 { name: "👤 Identité",                        value: `**ID Discord:** <@${discord}>\n**Âge:** ${age} ans`,       inline: false },
@@ -252,9 +251,10 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.querySelector('span').textContent = 'ENVOI EN COURS...';
 
         const embed = {
+            title : "📋 Nouvelle Candidature STAFF — LastWay",
             color : 3066993,
             fields: [
-                { name: "👤 ID Discord",         value: `<@${discord}> **Âge:** ${age} ans`, inline: false },
+                { name: "👤 Identité",         value: `**ID Discord:** <@${discord}>\n**Âge:** ${age} ans`, inline: false },
                 { name: "🏆 Expérience Staff", value: experience,                                            inline: false },
                 { name: "📚 Pédagogie",        value: pedagogie,                                             inline: false },
                 { name: "⚡ Gestion conflits", value: conflict,                                              inline: false },
