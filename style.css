@@ -229,28 +229,20 @@ textarea {
 
 .checkbox-group {
     margin-top: 1rem;
-    padding: 1.2rem;
-    background: rgba(74, 222, 128, 0.03);
-    border-radius: 12px;
-    border: 1px solid var(--border-color);
     transition: all 0.3s ease;
 }
 
-.checkbox-group:hover {
-    background: rgba(74, 222, 128, 0.06);
-    border-color: var(--primary);
-}
-
+/* Layout : case à gauche HORS du bloc texte */
 .custom-checkbox-container {
     display: flex;
-    align-items: center;
-    position: relative;
+    align-items: flex-start;
     cursor: pointer;
     font-size: 0.9rem;
     user-select: none;
-    gap: 15px;
+    gap: 0;
 }
 
+/* Input natif caché */
 .custom-checkbox-container input {
     position: absolute;
     opacity: 0;
@@ -259,51 +251,85 @@ textarea {
     width: 0;
 }
 
+/* Case carrée, extérieure à gauche du bloc */
 .checkmark {
-    position: relative;
-    height: 24px;
+    flex-shrink: 0;
     width: 24px;
+    height: 24px;
+    margin-top: 2px;
+    margin-right: 14px;
     background-color: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--border-color);
+    border: 2px solid rgba(226, 226, 226, 0.35);
     border-radius: 6px;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
 }
 
-.custom-checkbox-container:hover input~.checkmark {
-    background-color: rgba(74, 222, 128, 0.1);
+/* Hover sur la case */
+.custom-checkbox-container:hover .checkmark {
+    border-color: #4ade80;
+    background-color: rgba(74, 222, 128, 0.08);
 }
 
-.custom-checkbox-container input:checked~.checkmark {
+/* Checked */
+.custom-checkbox-container input:checked ~ .checkmark {
     background-color: #3a7d44;
-    border-color: #3a7d44;
-    box-shadow: 0 0 15px rgba(74, 222, 128, 0.4);
+    border-color: #4ade80;
+    box-shadow: 0 0 12px rgba(74, 222, 128, 0.4);
 }
 
+/* Crochet */
 .checkmark:after {
     content: "";
     position: absolute;
     display: none;
-}
-
-.custom-checkbox-container input:checked~.checkmark:after {
-    display: block;
-}
-
-.custom-checkbox-container .checkmark:after {
-    left: 8px;
-    top: 3px;
+    left: 7px;
+    top: 2px;
     width: 6px;
-    height: 12px;
-    border: solid white;
-    border-width: 0 3px 3px 0;
+    height: 11px;
+    border: solid #fff;
+    border-width: 0 2.5px 2.5px 0;
     transform: rotate(45deg);
 }
 
+.custom-checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Bloc texte : padding interne avec fond */
+.checkbox-text-block {
+    flex: 1;
+    background: rgba(74, 222, 128, 0.04);
+    border: 1px solid rgba(226, 226, 226, 0.1);
+    border-radius: 10px;
+    padding: 0.9rem 1.1rem;
+    color: var(--text-main);
+    line-height: 1.5;
+    font-size: 0.88rem;
+    transition: border-color 0.25s, background 0.25s;
+}
+
+.custom-checkbox-container:hover .checkbox-text-block {
+    border-color: rgba(74, 222, 128, 0.3);
+    background: rgba(74, 222, 128, 0.07);
+}
+
+.custom-checkbox-container input:checked ~ .checkmark ~ .checkbox-text-block {
+    border-color: rgba(74, 222, 128, 0.4);
+}
+
+.checkbox-text-block strong {
+    color: #e74c3c;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+}
+
+/* Ancien .checkbox-text gardé pour compat Staff/Dev */
 .checkbox-text {
     color: var(--text-main);
     line-height: 1.4;
 }
-
 .checkbox-text strong {
     color: #e74c3c;
     text-transform: uppercase;
@@ -751,18 +777,4 @@ textarea {
     font-weight: 600;
 }
 
-/* ─ Checkbox fix complet (override --primary blanc) ─ */
-.custom-checkbox-container input:checked ~ .checkmark {
-    background-color: #3a7d44 !important;
-    border-color: #4ade80 !important;
-    box-shadow: 0 0 15px rgba(74, 222, 128, 0.45) !important;
-}
-.custom-checkbox-container .checkmark:after {
-    left: 8px;
-    top: 3px;
-    width: 6px;
-    height: 12px;
-    border: solid #fff;
-    border-width: 0 2.5px 2.5px 0;
-    transform: rotate(45deg);
-}
+/* checkbox override nettoyé */
