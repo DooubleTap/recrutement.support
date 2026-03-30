@@ -24,7 +24,14 @@
         <!-- ===== PAGE D'ACCUEIL ===== -->
         <div id="landingPage" class="landing-page">
             <p class="landing-intro">Choisissez le type de poste pour lequel vous souhaitez postuler</br>Prenez note que les applications mal remplis seronts ignoré complètement</p>
-            <div class="choice-grid">
+            <div class="choice-grid choice-grid-3">
+                <button class="choice-card choice-card-featured" id="btnDouane" onclick="showForm('douane')">
+                    <div class="choice-icon">🛃</div>
+                    <div class="choice-label">Formulaire Douane</div>
+                    <div class="choice-desc">Première connexion sur le serveur. Remplissez ce formulaire pour accéder à la ville.</div>
+                    <div class="choice-arrow">→</div>
+                    <div class="card-glow"></div>
+                </button>
                 <button class="choice-card" id="btnStaff" onclick="showForm('staff')">
                     <div class="choice-icon">📋</div>
                     <div class="choice-label">Application Staff</div>
@@ -41,6 +48,82 @@
                 </button>
             </div>
         </div>
+
+        <!-- ===== FORMULAIRE DOUANE ===== -->
+        <form id="douaneForm" class="glass-panel recruitment-form hidden" novalidate>
+            <button type="button" class="back-btn" onclick="showLanding()">← Retour</button>
+
+            <section class="form-section info-section">
+                <h2><i class="icon">🛃</i> Formulaire de Douane — LastWay</h2>
+                <ul class="task-list">
+                    <li>Ce formulaire est obligatoire pour accéder au serveur pour la première fois.</li>
+                    <li>Répondez honnêtement et avec le plus de détails possible — les réponses trop courtes sont automatiquement ignorées.</li>
+                    <li>L'équipe de gestion révise les formulaires manuellement. Soyez patient, le délai de réponse est de 24 à 72 heures.</li>
+                    <li>Ne pas pinger le staff pour tenter de faire avancer votre application — cela pourrait entraîner un refus direct.</li>
+                </ul>
+            </section>
+
+            <section class="form-section">
+                <h2><i class="icon">👤</i> Identité</h2>
+                <div class="input-group">
+                    <label for="douane_discord">ID Discord<br><small>(Discord → Paramètres → Avancé → Mode Développeur. Clic droit sur votre user → Copier l'Identifiant)</small></label>
+                    <input type="text" id="douane_discord" name="discord" placeholder="Exemple: 76182535192715264">
+                </div>
+                <div class="input-group">
+                    <label for="douane_age">Votre âge réel</label>
+                    <input type="number" id="douane_age" name="age" min="18" max="99" placeholder="18">
+                </div>
+                <div class="input-group">
+                    <label for="douane_connu">Comment avez-vous connu le serveur ? <span class="char-counter" id="douane_connu_count">0 / 500</span></label>
+                    <textarea id="douane_connu" name="connu" rows="3" data-min="50" data-max="500" placeholder="Ami, réseaux sociaux, Top-Serveurs, YouTube... (min. 50 caractères)"></textarea>
+                    <div class="char-bar"><div class="char-fill" id="douane_connu_fill"></div></div>
+                </div>
+            </section>
+
+            <section class="form-section">
+                <h2><i class="icon">🎭</i> Expérience & Roleplay</h2>
+                <div class="input-group">
+                    <label for="douane_xp">Quelle est votre expérience en roleplay ? <span class="char-counter" id="douane_xp_count">0 / 500</span></label>
+                    <textarea id="douane_xp" name="xp" rows="4" data-min="100" data-max="500" placeholder="Serveurs joués, ancienneté, rôles tenus... Soyez précis. (min. 100 caractères)"></textarea>
+                    <div class="char-bar"><div class="char-fill" id="douane_xp_fill"></div></div>
+                </div>
+                <div class="input-group">
+                    <label for="douane_regles">Qu'est-ce que le PowerGaming et le MetaGaming ? <span class="char-counter" id="douane_regles_count">0 / 500</span></label>
+                    <textarea id="douane_regles" name="regles" rows="4" data-min="100" data-max="500" placeholder="Définissez les deux termes dans vos propres mots. (min. 100 caractères)"></textarea>
+                    <div class="char-bar"><div class="char-fill" id="douane_regles_fill"></div></div>
+                </div>
+            </section>
+
+            <section class="form-section">
+                <h2><i class="icon">🧬</i> Votre Personnage</h2>
+                <div class="input-group">
+                    <label for="douane_perso">L'histoire de votre personnage <span class="char-counter" id="douane_perso_count">0 / 500</span></label>
+                    <textarea id="douane_perso" name="perso" rows="6" data-min="300" data-max="500" placeholder="Nom, origine, passé, ce qui l'a amené en ville... Racontez son histoire. (min. 300 caractères)"></textarea>
+                    <div class="char-bar"><div class="char-fill" id="douane_perso_fill"></div></div>
+                </div>
+                <div class="input-group">
+                    <label for="douane_buts">Les buts de votre personnage en ville (court et long terme) <span class="char-counter" id="douane_buts_count">0 / 1000</span></label>
+                    <textarea id="douane_buts" name="buts" rows="6" data-min="200" data-max="1000" placeholder="Qu'est-ce que votre personnage veut accomplir ? À court terme (semaines) et à long terme (mois)... (min. 200 caractères)"></textarea>
+                    <div class="char-bar"><div class="char-fill" id="douane_buts_fill"></div></div>
+                </div>
+            </section>
+
+            <section class="form-section">
+                <h2><i class="icon">✅</i> Confirmation</h2>
+                <div class="input-group checkbox-group">
+                    <label class="custom-checkbox-container">
+                        <input type="checkbox" id="douane_confirm" name="confirm">
+                        <span class="checkmark"></span>
+                        <span class="checkbox-text">J'ai compris que mon application est bien envoyée et je ne pingerai <strong>pas</strong> le staff pour tenter de faire avancer les choses. 😄</span>
+                    </label>
+                </div>
+            </section>
+
+            <button type="button" id="douaneSubmitBtn" class="primary-btn">
+                <span>ENVOYER LE FORMULAIRE DE DOUANE</span>
+                <div class="btn-glow"></div>
+            </button>
+        </form>
 
         <!-- ===== FORMULAIRE STAFF ===== -->
         <form id="staffForm" class="glass-panel recruitment-form hidden" novalidate>
