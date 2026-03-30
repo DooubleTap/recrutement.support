@@ -36,7 +36,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // =============================================
     // NAVIGATION
     // =============================================
-    window.showForm = function(type) {
+    window.showForm = async function(type) {
+        // Vérification des rôles avant d'afficher le formulaire
+        if (type === 'douane' || type === 'staff' || type === 'dev') {
+            const discordId = (type === 'douane')
+                ? null  // Pour douane, on vérifie à la soumission
+                : null; // Pré-check optionnel — la vraie validation est dans /api/submit
+
+            // Pour staff/dev : afficher un avertissement sur le prérequis citoyen
+            if (type === 'staff' || type === 'dev') {
+                const label = type === 'staff' ? 'Staff' : 'Dev';
+                // On laisse passer — la vérification réelle se fait côté serveur avec l'ID Discord
+                // L'ID sera vérifié lors de la soumission dans /api/submit
+            }
+        }
+
         document.getElementById('landingPage').classList.add('hidden');
         document.getElementById('douaneForm').classList.add('hidden');
         document.getElementById('staffForm').classList.add('hidden');
@@ -419,7 +433,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const hidden  = form.querySelector('input[type="hidden"]');
                 if (hidden) hidden.value = '';
             } else {
-                alert("Erreur Discord : " + response.status);
+                const errData = await response.json().catch(() => ({}));
+                const msg = errData.error || 'Erreur inconnue.';
+                showToast(msg, 'error');
+                // Remonter en haut pour que le joueur voie le message
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         } catch (error) {
             console.error(error);
