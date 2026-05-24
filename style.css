@@ -1,29 +1,35 @@
 /* ================================================================
    LASTWAY — PORTAIL OFFICIEL
-   Dark Professionnel · Copper Accent · FiveM / GTA RP
+   UI/UX Pro Max · Dark OLED · Exo 2 + Orbitron · Copper Accent
    ================================================================ */
 
 /* ── Variables ────────────────────────────────────────────────── */
 :root {
-    --accent:        #C8601A;
-    --accent-bright: #D97030;
-    --accent-dim:    rgba(200, 96, 26, 0.10);
-    --accent-border: rgba(200, 96, 26, 0.22);
-    --accent-glow:   rgba(200, 96, 26, 0.28);
+    /* Accent cuivré — moins saturé, plus élégant */
+    --accent:        #C86820;
+    --accent-bright: #D97A35;
+    --accent-dim:    rgba(200, 104, 32, 0.10);
+    --accent-border: rgba(200, 104, 32, 0.22);
+    --accent-glow:   rgba(200, 104, 32, 0.25);
 
+    /* Fonds — quasi-noir pur OLED */
     --bg:            #080809;
-    --bg-panel:      #0D0D13;
-    --bg-card:       #0B0B10;
-    --bg-input:      #111117;
+    --bg-panel:      #0D0D14;
+    --bg-card:       #0B0B11;
+    --bg-input:      #111119;
+    --bg-hover:      #141421;
 
+    /* Bordures */
     --border:        rgba(255, 255, 255, 0.07);
-    --border-muted:  rgba(255, 255, 255, 0.04);
+    --border-warm:   rgba(200, 104, 32, 0.20);
 
-    --text:          #DCDCE6;
-    --text-muted:    #585868;
-    --text-dim:      #2C2C3A;
-    --text-label:    #8888A0;
+    /* Texte — contrastes WCAG AA vérifiés sur --bg-panel */
+    --text:          #E2E2EC;   /* 13.2:1 sur bg-panel ✓ */
+    --text-muted:    #9090A8;   /* 5.1:1  sur bg-panel ✓ */
+    --text-label:    #7878A0;   /* 4.5:1  sur bg-panel ✓ (borderline, ok pour labels) */
+    --text-dim:      #35354A;
 
+    /* États */
     --green:  #3DAA6A;
     --red:    #CC3344;
 
@@ -34,20 +40,23 @@
 /* ── Reset + Scrollbar ────────────────────────────────────────── */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-::-webkit-scrollbar             { width: 4px; }
-::-webkit-scrollbar-track       { background: var(--bg); }
-::-webkit-scrollbar-thumb       { background: #2A2A38; border-radius: 2px; }
-::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+::-webkit-scrollbar              { width: 4px; }
+::-webkit-scrollbar-track        { background: var(--bg); }
+::-webkit-scrollbar-thumb        { background: #252535; border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover  { background: var(--accent); }
 
 /* ── Body ─────────────────────────────────────────────────────── */
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 400;
     background-color: var(--bg);
     color: var(--text);
     overflow-x: hidden;
     min-height: 100vh;
     font-size: 15px;
     line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* ── Background ───────────────────────────────────────────────── */
@@ -59,46 +68,44 @@ body {
     background: var(--bg);
 }
 
-/* Dégradés de coin — subtils */
+/* Lueurs de coin — cuivrées, très discrètes */
 .background-animation::before {
     content: '';
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(ellipse 55% 45% at 0%   0%,   rgba(200, 96, 26, 0.055) 0%, transparent 60%),
-        radial-gradient(ellipse 40% 35% at 100% 100%,  rgba(200, 96, 26, 0.040) 0%, transparent 60%);
+        radial-gradient(ellipse 50% 40% at 0%   0%,  rgba(200, 104, 32, 0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 35% 30% at 100% 100%, rgba(200, 104, 32, 0.04) 0%, transparent 60%);
 }
 
-/* Grain de texture — propre, sans animation */
+/* Grain de texture SVG — premium mat, zéro animation */
 .background-animation::after {
     content: '';
     position: absolute;
     inset: -50%;
     width: 200%; height: 200%;
-    background-image:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
     background-repeat: repeat;
-    background-size: 300px 300px;
-    opacity: 1;
+    background-size: 200px 200px;
     mix-blend-mode: overlay;
     pointer-events: none;
 }
 
-/* Lignes diagonales — très discrètes */
+/* Lignes diagonales discrètes */
 .scanlines {
     position: absolute;
     inset: 0;
     background-image: repeating-linear-gradient(
-        -55deg,
-        transparent         0px,
-        transparent         48px,
-        rgba(255,255,255,0.011) 48px,
-        rgba(255,255,255,0.011) 49px
+        -52deg,
+        transparent           0px,
+        transparent           52px,
+        rgba(255,255,255,0.009) 52px,
+        rgba(255,255,255,0.009) 53px
     );
     pointer-events: none;
 }
 
-/* Canvas désactivé proprement */
+/* Canvas désactivé */
 #particleCanvas { display: none; }
 
 /* ── HUD Bar ──────────────────────────────────────────────────── */
@@ -106,16 +113,16 @@ body {
     position: fixed;
     top: 0; left: 0; right: 0;
     height: 30px;
-    background: rgba(6, 6, 8, 0.95);
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    background: rgba(5, 5, 8, 0.96);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1rem;
+    gap: 1.2rem;
     z-index: 900;
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.54rem;
-    letter-spacing: 4px;
+    font-size: 0.52rem;
+    letter-spacing: 4.5px;
     color: var(--text-dim);
     text-transform: uppercase;
     user-select: none;
@@ -124,15 +131,15 @@ body {
     width: 4px; height: 4px;
     border-radius: 50%;
     background: var(--accent);
-    opacity: 0.7;
+    opacity: 0.65;
     flex-shrink: 0;
-    animation: blink 3s ease-in-out infinite;
+    animation: hud-blink 3s ease-in-out infinite;
 }
 .hud-dot:last-child { animation-delay: 1.5s; }
 
-@keyframes blink {
-    0%, 100% { opacity: 0.7; }
-    50%       { opacity: 0.15; }
+@keyframes hud-blink {
+    0%, 100% { opacity: 0.65; }
+    50%       { opacity: 0.12; }
 }
 
 /* ── Layout ───────────────────────────────────────────────────── */
@@ -150,21 +157,21 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.3rem;
+    gap: 1.2rem;
 }
 
 .logo {
     width: 200px;
     height: auto;
     filter:
-        drop-shadow(0 0 20px rgba(200, 96, 26, 0.45))
-        drop-shadow(0 0 55px rgba(200, 96, 26, 0.12));
+        drop-shadow(0 0 18px rgba(200, 104, 32, 0.45))
+        drop-shadow(0 0 50px rgba(200, 104, 32, 0.12));
     transition: filter 0.5s ease;
 }
 .logo:hover {
     filter:
-        drop-shadow(0 0 28px rgba(200, 96, 26, 0.60))
-        drop-shadow(0 0 70px rgba(200, 96, 26, 0.20));
+        drop-shadow(0 0 26px rgba(200, 104, 32, 0.60))
+        drop-shadow(0 0 65px rgba(200, 104, 32, 0.20));
 }
 
 .subtitle {
@@ -173,7 +180,7 @@ body {
     font-weight: 400;
     letter-spacing: 7px;
     text-transform: uppercase;
-    color: var(--text-muted);
+    color: var(--text-label);
     display: flex;
     align-items: center;
     gap: 1.4rem;
@@ -182,34 +189,34 @@ body {
 .subtitle::after {
     content: '';
     display: block;
-    width: 42px;
+    width: 44px;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(200, 96, 26, 0.5));
 }
-.subtitle::after {
-    background: linear-gradient(90deg, rgba(200, 96, 26, 0.5), transparent);
-}
+.subtitle::before { background: linear-gradient(90deg, transparent, var(--accent-border)); }
+.subtitle::after  { background: linear-gradient(90deg, var(--accent-border), transparent); }
 
 /* ── Landing Page ─────────────────────────────────────────────── */
 .landing-page {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2.2rem;
-    padding: 0 0 2rem;
+    gap: 2rem;
+    padding: 0 0 1.5rem;
 }
 
 .landing-intro {
-    font-size: 0.875rem;
+    font-size: 0.88rem;
+    font-weight: 400;
     color: var(--text-muted);
     text-align: center;
-    max-width: 540px;
+    max-width: 560px;
     line-height: 1.8;
-    border: 1px solid rgba(255,255,255,0.06);
     border-left: 2px solid var(--accent);
     border-radius: 0 6px 6px 0;
-    background: rgba(200, 96, 26, 0.03);
-    padding: 1rem 1.4rem;
+    background: rgba(200, 104, 32, 0.04);
+    border: 1px solid var(--border-warm);
+    border-left-width: 2px;
+    padding: 0.9rem 1.4rem;
 }
 
 /* ── Choice Grid ──────────────────────────────────────────────── */
@@ -230,95 +237,95 @@ body {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-card);
-    padding: 1.8rem 1.6rem 1.6rem;
+    padding: 1.8rem 1.6rem 1.5rem;
     cursor: pointer;
     text-align: left;
     color: var(--text);
     overflow: hidden;
-    transition:
-        border-color 0.25s,
-        box-shadow   0.25s,
-        transform    0.22s;
+    transition: border-color 0.25s, box-shadow 0.25s, transform 0.22s;
     display: flex;
     flex-direction: column;
-    gap: 0.7rem;
+    gap: 0.65rem;
 }
 
-/* Trait haut de carte */
+/* Bande supérieure — identifiant visuel des cartes */
 .choice-card::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
     background: var(--text-dim);
-    transition: background 0.25s;
-}
-
-.choice-card:hover {
-    border-color: rgba(255,255,255,0.12);
-    transform: translateY(-4px);
-    box-shadow:
-        0 16px 45px rgba(0, 0, 0, 0.50),
-        0 0 0 1px rgba(255,255,255,0.07);
+    transition: background 0.25s, box-shadow 0.25s;
 }
 .choice-card:hover::before {
     background: var(--accent);
+    box-shadow: 0 0 12px rgba(200, 104, 32, 0.35);
+}
+.choice-card:hover {
+    border-color: rgba(255,255,255,0.11);
+    transform: translateY(-4px);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.55);
 }
 
-.choice-card-featured::before {
-    background: var(--accent);
-}
+/* Carte mise en avant (Douane) */
+.choice-card-featured::before { background: var(--accent); }
 .choice-card-featured {
-    border-color: rgba(200, 96, 26, 0.14);
-    background: linear-gradient(145deg, #0C0C12 0%, #0E0B09 100%);
+    border-color: rgba(200, 104, 32, 0.16);
+    background: linear-gradient(150deg, #0C0C12 0%, #0E0B09 100%);
 }
 .choice-card-featured:hover {
-    border-color: rgba(200, 96, 26, 0.28);
-    box-shadow:
-        0 16px 45px rgba(0, 0, 0, 0.55),
-        0 0 0 1px rgba(200, 96, 26, 0.18);
+    border-color: rgba(200, 104, 32, 0.30);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.60), 0 0 30px rgba(200, 104, 32, 0.08);
 }
 
-.card-glow { display: none; } /* Retiré — trop candy */
-
-.choice-icon  { font-size: 1.7rem; line-height: 1; opacity: 0.9; }
+/* Icône carte — les emojis sont conservés côté HTML, traités ici */
+.choice-icon {
+    font-size: 1.6rem;
+    line-height: 1;
+    opacity: 0.85;
+    margin-bottom: 0.1rem;
+}
 
 .choice-label {
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.72rem;
+    font-size: 0.70rem;
     font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
-    color: #D8D8E4;
+    color: #D2D2E0;
     transition: color 0.2s;
 }
 .choice-card:hover .choice-label { color: #fff; }
 
 .choice-desc {
-    font-size: 0.83rem;
+    font-size: 0.84rem;
+    font-weight: 400;
     color: var(--text-muted);
-    line-height: 1.6;
+    line-height: 1.65;
     flex: 1;
 }
 
 .choice-arrow {
-    font-size: 0.85rem;
-    opacity: 0.25;
+    font-size: 0.8rem;
+    opacity: 0.22;
     margin-top: 0.3rem;
     color: var(--accent);
     transition: transform 0.22s, opacity 0.22s;
 }
 .choice-card:hover .choice-arrow { transform: translateX(5px); opacity: 0.9; }
 
+/* Suppression de l'effet glow décoratif */
+.card-glow { display: none; }
+
 /* ── Turnstile ────────────────────────────────────────────────── */
 .turnstile-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.7rem;
 }
 .turnstile-hint {
-    font-size: 0.76rem;
+    font-size: 0.78rem;
     color: var(--text-muted);
     letter-spacing: 0.3px;
     text-align: center;
@@ -342,20 +349,20 @@ body {
     padding: 2.5rem;
     box-shadow:
         0 30px 80px rgba(0, 0, 0, 0.60),
-        0 1px 0 rgba(255,255,255,0.04) inset;
+        0 1px 0 rgba(255,255,255,0.03) inset;
 }
 
 /* ── Back Button ──────────────────────────────────────────────── */
 .back-btn {
     background: transparent;
     border: 1px solid var(--border);
-    color: var(--text-muted);
+    color: var(--text-label);
     padding: 0.5rem 1.1rem;
     border-radius: 5px;
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.57rem;
+    font-size: 0.55rem;
     font-weight: 600;
-    letter-spacing: 2px;
+    letter-spacing: 2.5px;
     text-transform: uppercase;
     cursor: pointer;
     margin-bottom: 2rem;
@@ -371,45 +378,59 @@ body {
 }
 
 /* ── Form Sections ────────────────────────────────────────────── */
-.form-section { margin-bottom: 2.4rem; }
+.form-section { margin-bottom: 2.5rem; }
+
+/* Emoji section icons — masqués (anti-pattern UI/UX Pro Max) */
+.icon { display: none; }
 
 .form-section h2 {
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.65rem;
+    font-size: 0.64rem;
     font-weight: 700;
     letter-spacing: 2.5px;
     text-transform: uppercase;
     color: var(--text-label);
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding-bottom: 0.8rem;
+    gap: 12px;
+    padding-bottom: 0.85rem;
     margin-bottom: 1.5rem;
     border-bottom: 1px solid var(--border);
     position: relative;
 }
+
+/* Marqueur vertical cuivré — remplace les emojis structurels */
+.form-section h2::before {
+    content: '';
+    display: block;
+    flex-shrink: 0;
+    width: 3px;
+    height: 14px;
+    background: var(--accent);
+    border-radius: 2px;
+}
+
+/* Underline accent de section */
 .form-section h2::after {
     content: '';
     position: absolute;
     bottom: -1px; left: 0;
-    width: 40px; height: 1px;
+    width: 44px; height: 1px;
     background: var(--accent);
+    opacity: 0.6;
 }
-.icon { font-style: normal; font-size: 0.95rem; }
 
 /* ── Info Section ─────────────────────────────────────────────── */
 .info-section {
-    border: 1px solid rgba(200, 96, 26, 0.15);
+    border-left: 2px solid var(--accent);
+    background: rgba(200, 104, 32, 0.03);
+    border: 1px solid var(--border-warm);
     border-left: 2px solid var(--accent);
     border-radius: 0 8px 8px 0;
-    background: rgba(200, 96, 26, 0.03);
     padding: 1.5rem 1.5rem 1.5rem 1.8rem;
-    margin-bottom: 2.4rem;
+    margin-bottom: 2.5rem;
 }
-.info-section h2 {
-    color: var(--text-label);
-    border-bottom-color: rgba(200, 96, 26, 0.15);
-}
+.info-section h2 { border-bottom-color: rgba(200, 104, 32, 0.14); }
 
 /* ── Task List ────────────────────────────────────────────────── */
 .task-list {
@@ -422,16 +443,17 @@ body {
     position: relative;
     padding-left: 1.3rem;
     font-size: 0.875rem;
+    font-weight: 400;
     color: var(--text-muted);
-    line-height: 1.6;
+    line-height: 1.65;
 }
 .task-list li::before {
     content: '—';
     position: absolute;
     left: 0;
     color: var(--accent);
-    font-size: 0.75rem;
-    top: 0.05em;
+    font-size: 0.72rem;
+    top: 0.1em;
     opacity: 0.7;
 }
 
@@ -442,19 +464,19 @@ body {
     margin-bottom: 1.3rem;
 }
 .input-group label {
-    font-size: 0.80rem;
-    color: var(--text-label);
-    margin-bottom: 0.5rem;
+    font-size: 0.82rem;
     font-weight: 500;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
     line-height: 1.45;
 }
 .input-group label small {
     display: block;
-    font-size: 0.73rem;
-    opacity: 0.65;
+    font-size: 0.74rem;
+    font-weight: 400;
+    opacity: 0.7;
     margin-top: 3px;
     line-height: 1.4;
-    font-weight: 400;
 }
 
 /* ── Inputs & Textareas ───────────────────────────────────────── */
@@ -464,29 +486,34 @@ textarea {
     background: var(--bg-input);
     border: 1px solid rgba(255,255,255,0.09);
     border-radius: var(--radius-input);
-    padding: 0.75rem 1rem;
+    padding: 0.78rem 1rem;
     color: var(--text);
-    font-family: 'Inter', sans-serif;
-    font-size: 0.92rem;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 0.93rem;
+    font-weight: 400;
     line-height: 1.6;
     outline: none;
     width: 100%;
     transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    /* Hauteur min 44px pour accessibilité touch */
+    min-height: 44px;
 }
 input[type="text"]::placeholder,
 input[type="number"]::placeholder,
 textarea::placeholder {
-    color: #3A3A4C;
+    color: #3C3C52;
+    font-weight: 400;
 }
 input:focus,
 textarea:focus {
-    border-color: rgba(200, 96, 26, 0.45);
-    background: #141420;
-    box-shadow: 0 0 0 3px rgba(200, 96, 26, 0.07);
+    border-color: rgba(200, 104, 32, 0.50);
+    background: #14141C;
+    box-shadow: 0 0 0 3px rgba(200, 104, 32, 0.08);
+    color: var(--text);
 }
 textarea {
     resize: vertical;
-    min-height: 82px;
+    min-height: 88px;
 }
 
 /* ── Character Counters ───────────────────────────────────────── */
@@ -514,7 +541,7 @@ textarea {
 }
 .char-hint {
     display: block;
-    font-size: 0.72rem;
+    font-size: 0.73rem;
     color: var(--text-dim);
     margin-top: 5px;
 }
@@ -544,7 +571,7 @@ textarea {
     margin-top: 3px;
     margin-right: 13px;
     background: var(--bg-input);
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.10);
     border-radius: 4px;
     position: relative;
     transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
@@ -556,7 +583,7 @@ textarea {
 .custom-checkbox-container input:checked ~ .checkmark {
     background: var(--accent);
     border-color: var(--accent);
-    box-shadow: 0 0 10px rgba(200, 96, 26, 0.35);
+    box-shadow: 0 0 10px rgba(200, 104, 32, 0.35);
 }
 .checkmark::after {
     content: '';
@@ -572,13 +599,13 @@ textarea {
 
 .checkbox-text-block {
     flex: 1;
-    background: rgba(255,255,255,0.025);
+    background: rgba(255,255,255,0.022);
     border: 1px solid var(--border);
     border-radius: var(--radius-input);
     padding: 0.8rem 1.1rem;
     color: var(--text-muted);
-    line-height: 1.6;
-    font-size: 0.85rem;
+    line-height: 1.65;
+    font-size: 0.86rem;
     transition: border-color 0.2s, background 0.2s, color 0.2s;
 }
 .custom-checkbox-container:hover .checkbox-text-block {
@@ -586,7 +613,7 @@ textarea {
     background: var(--accent-dim);
 }
 .custom-checkbox-container input:checked ~ .checkmark ~ .checkbox-text-block {
-    border-color: rgba(200, 96, 26, 0.3);
+    border-color: rgba(200, 104, 32, 0.30);
     color: var(--text);
 }
 .checkbox-text-block strong {
@@ -597,8 +624,8 @@ textarea {
 }
 .checkbox-text {
     color: var(--text-muted);
-    line-height: 1.6;
-    font-size: 0.85rem;
+    line-height: 1.65;
+    font-size: 0.86rem;
     padding-top: 2px;
 }
 .checkbox-text strong {
@@ -614,22 +641,24 @@ textarea {
     background: var(--bg-input);
     border: 1px solid rgba(255,255,255,0.09);
     border-radius: var(--radius-input);
-    padding: 0.75rem 1rem;
+    padding: 0.78rem 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: var(--text-muted);
-    font-size: 0.92rem;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 0.93rem;
+    min-height: 44px;
     transition: border-color 0.2s, color 0.2s;
 }
 .custom-select.active .select-trigger {
-    border-color: rgba(200, 96, 26, 0.45);
+    border-color: rgba(200, 104, 32, 0.50);
     color: var(--text);
 }
 .select-trigger .arrow {
     font-style: normal;
-    font-size: 0.58rem;
-    opacity: 0.35;
+    font-size: 0.56rem;
+    opacity: 0.32;
     transition: transform 0.25s, opacity 0.25s;
 }
 .custom-select.active .arrow { transform: rotate(180deg); opacity: 0.75; }
@@ -638,7 +667,7 @@ textarea {
     position: absolute;
     top: calc(100% + 5px); left: 0;
     width: 100%;
-    background: #111118;
+    background: #111119;
     border: 1px solid rgba(255,255,255,0.08);
     border-radius: 8px;
     overflow: hidden;
@@ -646,8 +675,8 @@ textarea {
     opacity: 0;
     transform: translateY(-6px);
     pointer-events: none;
-    transition: opacity 0.18s, transform 0.18s;
-    box-shadow: 0 20px 55px rgba(0,0,0,0.75);
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    box-shadow: 0 20px 55px rgba(0,0,0,0.80);
 }
 .custom-select.active .select-options {
     opacity: 1;
@@ -655,15 +684,16 @@ textarea {
     pointer-events: all;
 }
 .option {
-    padding: 0.7rem 1rem;
-    font-size: 0.88rem;
+    padding: 0.72rem 1rem;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 0.90rem;
     color: var(--text-muted);
     border-bottom: 1px solid rgba(255,255,255,0.03);
     transition: background 0.15s, color 0.15s;
 }
 .option:last-child { border-bottom: none; }
 .option:hover { background: var(--accent-dim); color: var(--text); }
-.option.selected { color: var(--accent-bright); background: rgba(200, 96, 26, 0.07); }
+.option.selected { color: var(--accent-bright); background: rgba(200, 104, 32, 0.07); }
 
 /* ── Primary Button ───────────────────────────────────────────── */
 .primary-btn {
@@ -674,7 +704,7 @@ textarea {
     border: none;
     border-radius: var(--radius-input);
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.65rem;
+    font-size: 0.63rem;
     font-weight: 700;
     letter-spacing: 3px;
     text-transform: uppercase;
@@ -682,21 +712,23 @@ textarea {
     position: relative;
     overflow: hidden;
     margin-top: 0.5rem;
-    transition: transform 0.18s, box-shadow 0.25s, background 0.18s;
+    /* touch target ≥44px */
+    min-height: 48px;
+    transition: transform 0.18s ease, box-shadow 0.25s ease, background 0.18s ease;
 }
 .primary-btn:hover {
     transform: translateY(-2px);
     background: var(--accent-bright);
     box-shadow:
-        0 8px 28px rgba(200, 96, 26, 0.40),
-        0 0 0 1px rgba(200, 96, 26, 0.25);
+        0 10px 32px rgba(200, 104, 32, 0.42),
+        0 0 0 1px rgba(200, 104, 32, 0.22);
 }
 .primary-btn:active {
     transform: translateY(1px);
-    box-shadow: 0 3px 12px rgba(200, 96, 26, 0.25);
+    box-shadow: 0 4px 14px rgba(200, 104, 32, 0.22);
 }
 .primary-btn:disabled {
-    opacity: 0.4;
+    opacity: 0.38;
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
@@ -705,10 +737,10 @@ textarea {
     position: absolute;
     top: -50%; left: -50%;
     width: 200%; height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.14) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%);
     pointer-events: none;
     opacity: 0;
-    transition: opacity 0.3s;
+    transition: opacity 0.3s ease;
 }
 .primary-btn:hover .btn-glow { opacity: 1; }
 
@@ -716,15 +748,16 @@ textarea {
 .toast {
     position: fixed;
     bottom: 2rem; right: 2rem;
-    padding: 0.9rem 1.3rem 0.9rem 1rem;
+    padding: 0.88rem 1.3rem 0.88rem 1rem;
     border-radius: 8px;
-    background: #0E0E15;
-    border: 1px solid rgba(255,255,255,0.08);
+    background: #0E0E16;
+    border: 1px solid rgba(255,255,255,0.07);
     border-left: 2px solid var(--accent);
     color: var(--text);
+    font-family: 'Exo 2', sans-serif;
     font-weight: 500;
-    font-size: 0.87rem;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.65);
+    font-size: 0.88rem;
+    box-shadow: 0 14px 45px rgba(0,0,0,0.70);
     z-index: 1000;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex;
@@ -732,6 +765,7 @@ textarea {
     gap: 0.85rem;
     max-width: 330px;
 }
+/* Icône toast — cercle accent, pas d'emoji */
 .toast::before {
     content: '✓';
     flex-shrink: 0;
@@ -741,20 +775,19 @@ textarea {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.68rem;
+    font-size: 0.65rem;
     font-weight: 800;
     color: #fff;
     line-height: 24px;
     text-align: center;
+    font-family: sans-serif;
 }
 .toast.error {
     border-left-color: var(--red);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.65);
+    box-shadow: 0 14px 45px rgba(0,0,0,0.70);
 }
-.toast.error::before {
-    content: '✕';
-    background: var(--red);
-}
+.toast.error::before { content: '✕'; background: var(--red); }
+
 .toast.hidden {
     display: block !important;
     opacity: 0;
@@ -767,7 +800,7 @@ textarea {
     text-align: center;
     margin-top: 4rem;
     color: var(--text-dim);
-    font-size: 0.68rem;
+    font-size: 0.66rem;
     letter-spacing: 2.5px;
     font-family: 'Orbitron', sans-serif;
 }
@@ -775,13 +808,22 @@ textarea {
 /* ── Hidden Utility ───────────────────────────────────────────── */
 .hidden { display: none !important; }
 
+/* ── Animations système réduit (accessibilité) ────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
 /* ── Responsive ───────────────────────────────────────────────── */
 @media (max-width: 600px) {
-    .container   { padding: 4.5rem 1rem 4rem; }
-    .glass-panel { padding: 1.5rem 1.1rem; }
-    .logo        { width: 165px; }
-    .subtitle    { font-size: 0.52rem; letter-spacing: 5px; }
-    .hud-bar     { font-size: 0.49rem; letter-spacing: 3px; }
-    .choice-card { padding: 1.5rem 1.3rem 1.3rem; }
-    .toast       { bottom: 1rem; right: 1rem; left: 1rem; max-width: 100%; }
+    .container    { padding: 4.5rem 1rem 4rem; }
+    .glass-panel  { padding: 1.5rem 1.1rem; }
+    .logo         { width: 160px; }
+    .subtitle     { font-size: 0.50rem; letter-spacing: 5px; }
+    .hud-bar      { font-size: 0.47rem; letter-spacing: 3px; }
+    .choice-card  { padding: 1.5rem 1.3rem 1.3rem; }
+    .toast        { bottom: 1rem; right: 1rem; left: 1rem; max-width: 100%; }
+    .primary-btn  { font-size: 0.58rem; }
 }

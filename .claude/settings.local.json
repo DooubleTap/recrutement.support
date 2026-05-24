@@ -1,7 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm i *)"
+      "Bash(npm i *)",
+      "Read(//c/Users/admin/.claude/plugins/cache/ui-ux-pro-max-skill/ui-ux-pro-max/2.5.0/.claude/skills/ui-ux-pro-max/**)",
+      "Bash(python scripts/search.py \"gaming community portal dark professional recruitment form\" --design-system -p \"LastWay RP\" -f markdown)",
+      "Bash(py --version)",
+      "Bash(where python *)",
+      "PowerShell(winget install *)"
     ]
   }
 }
