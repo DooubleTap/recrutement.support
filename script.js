@@ -145,68 +145,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =============================================
-    // PARTICLE SYSTEM
+    // PARTICLE SYSTEM — désactivé (canvas retiré)
     // =============================================
-    const canvas = document.getElementById('particleCanvas');
-    const ctx    = canvas.getContext('2d');
-    let particlesArray = [];
-    let mouse = { x: null, y: null, radius: 150 };
-
-    window.addEventListener('mousemove', (e) => { mouse.x = e.x; mouse.y = e.y; });
-
-    const PARTICLE_COLORS = [
-        'rgba(255, 95,  0,  0.55)',
-        'rgba(255, 120, 20, 0.40)',
-        'rgba(255, 170, 0,  0.35)',
-        'rgba(255, 95,  0,  0.20)',
-        'rgba(255, 255, 255, 0.08)',
-    ];
-
-    class Particle {
-        constructor() {
-            this.x = this.baseX = Math.random() * canvas.width;
-            this.y = this.baseY = Math.random() * canvas.height;
-            this.size    = Math.random() * 1.6 + 0.3;
-            this.density = Math.random() * 25 + 1;
-            this.color   = PARTICLE_COLORS[Math.floor(Math.random() * PARTICLE_COLORS.length)];
-        }
-        draw() {
-            ctx.fillStyle = this.color;
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            ctx.closePath();
-            ctx.fill();
-        }
-        update() {
-            const dx = mouse.x - this.x, dy = mouse.y - this.y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            const force = (mouse.radius - dist) / mouse.radius;
-            if (dist < mouse.radius) {
-                this.x -= (dx / dist) * force * this.density;
-                this.y -= (dy / dist) * force * this.density;
-            } else {
-                if (this.x !== this.baseX) this.x -= (this.x - this.baseX) / 10;
-                if (this.y !== this.baseY) this.y -= (this.y - this.baseY) / 10;
-            }
-        }
-    }
-
-    function resizeCanvas() {
-        canvas.width  = window.innerWidth;
-        canvas.height = window.innerHeight;
-        particlesArray = [];
-        const n = (canvas.width * canvas.height) / 11000;
-        for (let i = 0; i < n; i++) particlesArray.push(new Particle());
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        particlesArray.forEach(p => { p.draw(); p.update(); });
-        requestAnimationFrame(animate);
-    }
-    animate();
 
     // =============================================
     // WEBHOOKS
