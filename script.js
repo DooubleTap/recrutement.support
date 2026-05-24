@@ -154,13 +154,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('mousemove', (e) => { mouse.x = e.x; mouse.y = e.y; });
 
+    const PARTICLE_COLORS = [
+        'rgba(255, 95,  0,  0.55)',
+        'rgba(255, 120, 20, 0.40)',
+        'rgba(255, 170, 0,  0.35)',
+        'rgba(255, 95,  0,  0.20)',
+        'rgba(255, 255, 255, 0.08)',
+    ];
+
     class Particle {
         constructor() {
             this.x = this.baseX = Math.random() * canvas.width;
             this.y = this.baseY = Math.random() * canvas.height;
-            this.size    = Math.random() * 2 + 0.5;
-            this.density = Math.random() * 30 + 1;
-            this.color   = '#fdfdfd';
+            this.size    = Math.random() * 1.6 + 0.3;
+            this.density = Math.random() * 25 + 1;
+            this.color   = PARTICLE_COLORS[Math.floor(Math.random() * PARTICLE_COLORS.length)];
         }
         draw() {
             ctx.fillStyle = this.color;
@@ -187,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
         canvas.width  = window.innerWidth;
         canvas.height = window.innerHeight;
         particlesArray = [];
-        const n = (canvas.width * canvas.height) / 9000;
+        const n = (canvas.width * canvas.height) / 11000;
         for (let i = 0; i < n; i++) particlesArray.push(new Particle());
     }
     window.addEventListener('resize', resizeCanvas);
