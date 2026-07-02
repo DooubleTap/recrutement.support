@@ -1,40 +1,28 @@
-/* ================================================================
-   LASTWAY — PORTAIL OFFICIEL
-   UI/UX Pro Max · Dark OLED · Exo 2 + Orbitron · Copper Accent
-   ================================================================ */
+/* ════════════════════════════════════════════════════════════
+   LASTWAY RP — PORTAIL DE RECRUTEMENT
+   Dark cinématique : or #e8793a, Bebas Neue + Inter.
+   Assorti au site principal lastway.ca
+   ════════════════════════════════════════════════════════════ */
 
-/* ── Variables ────────────────────────────────────────────────── */
 :root {
-    /* Accent cuivré — moins saturé, plus élégant */
-    --accent:        #C86820;
-    --accent-bright: #D97A35;
-    --accent-dim:    rgba(200, 104, 32, 0.10);
-    --accent-border: rgba(200, 104, 32, 0.22);
-    --accent-glow:   rgba(200, 104, 32, 0.25);
-
-    /* Fonds — quasi-noir pur OLED */
-    --bg:            #080809;
-    --bg-panel:      #0D0D14;
-    --bg-card:       #0B0B11;
-    --bg-input:      #111119;
-    --bg-hover:      #141421;
-
-    /* Bordures */
-    --border:        rgba(255, 255, 255, 0.07);
-    --border-warm:   rgba(200, 104, 32, 0.20);
-
-    /* Texte — contrastes WCAG AA vérifiés sur --bg-panel */
-    --text:          #E2E2EC;   /* 13.2:1 sur bg-panel ✓ */
-    --text-muted:    #9090A8;   /* 5.1:1  sur bg-panel ✓ */
-    --text-label:    #7878A0;   /* 4.5:1  sur bg-panel ✓ (borderline, ok pour labels) */
-    --text-dim:      #35354A;
-
-    /* États */
-    --green:  #3DAA6A;
-    --red:    #CC3344;
+    --gold:          #e8793a;
+    --gold-bright:   #f59a52;
+    --gold-dim:      rgba(232, 121, 58, 0.09);
+    --gold-border:   rgba(232, 121, 58, 0.22);
+    --bg:            #080808;
+    --surface:       #0f0f12;
+    --surface-2:     #18181f;
+    --border:        rgba(255, 255, 255, 0.06);
+    --border-strong: rgba(255, 255, 255, 0.11);
+    --text:          #f0f0f2;
+    --muted:         #8a8a9a;
+    --dim:           #62626e;
+    --red:           #ff7a7a;
+    --font-display:  'Bebas Neue', sans-serif;
+    --font-body:     'Inter', sans-serif;
 
     --radius-card:  10px;
-    --radius-input: 7px;
+    --radius-input: 5px;
 }
 
 /* ── Reset + Scrollbar ────────────────────────────────────────── */
@@ -42,12 +30,20 @@
 
 ::-webkit-scrollbar              { width: 4px; }
 ::-webkit-scrollbar-track        { background: var(--bg); }
-::-webkit-scrollbar-thumb        { background: #252535; border-radius: 2px; }
-::-webkit-scrollbar-thumb:hover  { background: var(--accent); }
+::-webkit-scrollbar-thumb        { background: #252530; border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover  { background: var(--gold); }
+
+::selection { background: var(--gold); color: #080808; }
+
+:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+    border-radius: 4px;
+}
 
 /* ── Body ─────────────────────────────────────────────────────── */
 body {
-    font-family: 'Exo 2', sans-serif;
+    font-family: var(--font-body);
     font-weight: 400;
     background-color: var(--bg);
     color: var(--text);
@@ -59,7 +55,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* ── Background ───────────────────────────────────────────────── */
+/* ── Décor global : grain + scanlines CRT ─────────────────────── */
 .background-animation {
     position: fixed;
     inset: 0;
@@ -68,69 +64,62 @@ body {
     background: var(--bg);
 }
 
-/* Lueurs de coin — cuivrées, très discrètes */
+/* Lueur d'ambiance or, très discrète */
 .background-animation::before {
     content: '';
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(ellipse 50% 40% at 0%   0%,  rgba(200, 104, 32, 0.06) 0%, transparent 60%),
-        radial-gradient(ellipse 35% 30% at 100% 100%, rgba(200, 104, 32, 0.04) 0%, transparent 60%);
+        radial-gradient(ellipse 80% 55% at 25% 115%, rgba(232, 121, 58, 0.09) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 40% at 100% 0%, rgba(232, 121, 58, 0.04) 0%, transparent 60%);
 }
 
-/* Grain de texture SVG — premium mat, zéro animation */
+/* Grain de texture SVG */
 .background-animation::after {
     content: '';
     position: absolute;
-    inset: -50%;
-    width: 200%; height: 200%;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
-    background-repeat: repeat;
-    background-size: 200px 200px;
-    mix-blend-mode: overlay;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 180px 180px;
+    opacity: 0.032;
     pointer-events: none;
 }
 
-/* Lignes diagonales discrètes */
+/* Scanlines CRT horizontales */
 .scanlines {
     position: absolute;
     inset: 0;
-    background-image: repeating-linear-gradient(
-        -52deg,
-        transparent           0px,
-        transparent           52px,
-        rgba(255,255,255,0.009) 52px,
-        rgba(255,255,255,0.009) 53px
-    );
+    background: repeating-linear-gradient(to bottom, transparent 0px, transparent 3px, rgba(0,0,0,0.025) 3px, rgba(0,0,0,0.025) 4px);
     pointer-events: none;
 }
 
 /* Canvas désactivé */
 #particleCanvas { display: none; }
 
-/* ── HUD Bar ──────────────────────────────────────────────────── */
+/* ── HUD Bar — style dispatch scanner ─────────────────────────── */
 .hud-bar {
     position: fixed;
     top: 0; left: 0; right: 0;
     height: 30px;
-    background: rgba(5, 5, 8, 0.96);
-    border-bottom: 1px solid rgba(255,255,255,0.04);
+    background: rgba(30, 200, 80, 0.07);
+    border-bottom: 1px solid rgba(50, 255, 100, 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 1.2rem;
     z-index: 900;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.52rem;
-    letter-spacing: 4.5px;
-    color: var(--text-dim);
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: rgba(80, 220, 120, 0.5);
     text-transform: uppercase;
     user-select: none;
 }
 .hud-dot {
     width: 4px; height: 4px;
     border-radius: 50%;
-    background: var(--accent);
+    background: var(--gold);
+    box-shadow: 0 0 6px var(--gold);
     opacity: 0.65;
     flex-shrink: 0;
     animation: hud-blink 3s ease-in-out infinite;
@@ -164,23 +153,23 @@ body {
     width: 200px;
     height: auto;
     filter:
-        drop-shadow(0 0 18px rgba(200, 104, 32, 0.45))
-        drop-shadow(0 0 50px rgba(200, 104, 32, 0.12));
+        drop-shadow(0 0 18px rgba(232, 121, 58, 0.40))
+        drop-shadow(0 0 50px rgba(232, 121, 58, 0.12));
     transition: filter 0.5s ease;
 }
 .logo:hover {
     filter:
-        drop-shadow(0 0 26px rgba(200, 104, 32, 0.60))
-        drop-shadow(0 0 65px rgba(200, 104, 32, 0.20));
+        drop-shadow(0 0 26px rgba(232, 121, 58, 0.55))
+        drop-shadow(0 0 65px rgba(232, 121, 58, 0.20));
 }
 
 .subtitle {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.58rem;
+    font-family: var(--font-display);
+    font-size: 0.95rem;
     font-weight: 400;
-    letter-spacing: 7px;
+    letter-spacing: 0.45em;
     text-transform: uppercase;
-    color: var(--text-label);
+    color: rgba(240, 240, 242, 0.28);
     display: flex;
     align-items: center;
     gap: 1.4rem;
@@ -190,10 +179,10 @@ body {
     content: '';
     display: block;
     width: 44px;
-    height: 1px;
+    height: 1.5px;
 }
-.subtitle::before { background: linear-gradient(90deg, transparent, var(--accent-border)); }
-.subtitle::after  { background: linear-gradient(90deg, var(--accent-border), transparent); }
+.subtitle::before { background: linear-gradient(90deg, transparent, var(--gold)); }
+.subtitle::after  { background: linear-gradient(90deg, var(--gold), transparent); }
 
 /* ── Landing Page ─────────────────────────────────────────────── */
 .landing-page {
@@ -207,15 +196,14 @@ body {
 .landing-intro {
     font-size: 0.88rem;
     font-weight: 400;
-    color: var(--text-muted);
+    color: var(--muted);
     text-align: center;
     max-width: 560px;
     line-height: 1.8;
-    border-left: 2px solid var(--accent);
+    background: var(--gold-dim);
+    border: 1px solid var(--gold-border);
+    border-left: 2px solid var(--gold);
     border-radius: 0 6px 6px 0;
-    background: rgba(200, 104, 32, 0.04);
-    border: 1px solid var(--border-warm);
-    border-left-width: 2px;
     padding: 0.9rem 1.4rem;
 }
 
@@ -223,7 +211,7 @@ body {
 .choice-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    gap: 1.2rem;
     width: 100%;
 }
 .choice-grid-3 { grid-template-columns: repeat(3, 1fr); }
@@ -231,10 +219,12 @@ body {
 @media (max-width: 750px) { .choice-grid-3 { grid-template-columns: 1fr; } }
 @media (max-width: 600px) { .choice-grid   { grid-template-columns: 1fr; } }
 
-/* ── Choice Cards ─────────────────────────────────────────────── */
+/* ── Choice Cards — style faction lastway.ca ──────────────────── */
 .choice-card {
     position: relative;
-    background: var(--bg-card);
+    background: rgba(15, 15, 18, 0.88);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border: 1px solid var(--border);
     border-radius: var(--radius-card);
     padding: 1.8rem 1.6rem 1.5rem;
@@ -242,43 +232,41 @@ body {
     text-align: left;
     color: var(--text);
     overflow: hidden;
-    transition: border-color 0.25s, box-shadow 0.25s, transform 0.22s;
+    font-family: var(--font-body);
+    transition: background 0.25s, border-color 0.25s, transform 0.25s;
     display: flex;
     flex-direction: column;
     gap: 0.65rem;
 }
 
-/* Bande supérieure — identifiant visuel des cartes */
+/* Ligne d'accent supérieure — révélée au survol */
 .choice-card::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: var(--text-dim);
-    transition: background 0.25s, box-shadow 0.25s;
+    background: linear-gradient(90deg, var(--gold) 0%, transparent 70%);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s ease;
 }
-.choice-card:hover::before {
-    background: var(--accent);
-    box-shadow: 0 0 12px rgba(200, 104, 32, 0.35);
-}
+.choice-card:hover::before { transform: scaleX(1); }
 .choice-card:hover {
-    border-color: rgba(255,255,255,0.11);
-    transform: translateY(-4px);
-    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.55);
+    background: rgba(24, 24, 31, 0.92);
+    border-color: var(--border-strong);
+    transform: translateY(-3px);
 }
 
 /* Carte mise en avant (Douane) */
-.choice-card-featured::before { background: var(--accent); }
+.choice-card-featured::before { transform: scaleX(1); }
 .choice-card-featured {
-    border-color: rgba(200, 104, 32, 0.16);
-    background: linear-gradient(150deg, #0C0C12 0%, #0E0B09 100%);
+    border-color: var(--gold-border);
+    background: linear-gradient(180deg, rgba(232, 121, 58, 0.05), transparent 45%), rgba(15, 15, 18, 0.88);
 }
 .choice-card-featured:hover {
-    border-color: rgba(200, 104, 32, 0.30);
-    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.60), 0 0 30px rgba(200, 104, 32, 0.08);
+    border-color: rgba(232, 121, 58, 0.4);
 }
 
-/* Icône carte — les emojis sont conservés côté HTML, traités ici */
 .choice-icon {
     font-size: 1.6rem;
     line-height: 1;
@@ -287,34 +275,34 @@ body {
 }
 
 .choice-label {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.70rem;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: #D2D2E0;
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    color: var(--text);
+    line-height: 1.1;
     transition: color 0.2s;
 }
 .choice-card:hover .choice-label { color: #fff; }
 
 .choice-desc {
-    font-size: 0.84rem;
+    font-size: 0.83rem;
     font-weight: 400;
-    color: var(--text-muted);
-    line-height: 1.65;
+    color: var(--muted);
+    line-height: 1.78;
     flex: 1;
 }
+.choice-desc b { color: var(--gold); font-weight: 700; }
 
 .choice-arrow {
-    font-size: 0.8rem;
-    opacity: 0.22;
+    font-size: 0.85rem;
+    opacity: 0.25;
     margin-top: 0.3rem;
-    color: var(--accent);
+    color: var(--gold);
     transition: transform 0.22s, opacity 0.22s;
 }
 .choice-card:hover .choice-arrow { transform: translateX(5px); opacity: 0.9; }
 
-/* Suppression de l'effet glow décoratif */
 .card-glow { display: none; }
 
 /* ── Turnstile ────────────────────────────────────────────────── */
@@ -326,8 +314,8 @@ body {
 }
 .turnstile-hint {
     font-size: 0.78rem;
-    color: var(--text-muted);
-    letter-spacing: 0.3px;
+    color: var(--muted);
+    letter-spacing: 0.02em;
     text-align: center;
     transition: color 0.3s;
 }
@@ -342,72 +330,72 @@ body {
 
 /* ── Glass Panel — Formulaires ────────────────────────────────── */
 .glass-panel {
-    background: var(--bg-panel);
-    border: 1px solid var(--border);
-    border-top: 2px solid var(--accent);
+    background: rgba(6, 6, 9, 0.55);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-top: 2px solid var(--gold);
     border-radius: var(--radius-card);
     padding: 2.5rem;
     box-shadow:
         0 30px 80px rgba(0, 0, 0, 0.60),
-        0 1px 0 rgba(255,255,255,0.03) inset;
+        0 1px 0 rgba(255, 255, 255, 0.03) inset;
 }
 
 /* ── Back Button ──────────────────────────────────────────────── */
 .back-btn {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--text-label);
-    padding: 0.5rem 1.1rem;
-    border-radius: 5px;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.55rem;
-    font-weight: 600;
-    letter-spacing: 2.5px;
+    background: none;
+    border: 1px solid var(--border-strong);
+    color: var(--muted);
+    padding: 0.45rem 0.95rem;
+    border-radius: 4px;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     cursor: pointer;
     margin-bottom: 2rem;
-    transition: border-color 0.2s, color 0.2s, background 0.2s;
+    transition: border-color 0.2s, color 0.2s;
     display: inline-flex;
     align-items: center;
     gap: 0.6rem;
 }
 .back-btn:hover {
-    border-color: var(--accent-border);
-    color: var(--accent-bright);
-    background: var(--accent-dim);
+    border-color: var(--gold-border);
+    color: var(--gold);
 }
 
 /* ── Form Sections ────────────────────────────────────────────── */
 .form-section { margin-bottom: 2.5rem; }
 
-/* Emoji section icons — masqués (anti-pattern UI/UX Pro Max) */
+/* Emoji section icons — masqués */
 .icon { display: none; }
 
 .form-section h2 {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.64rem;
-    font-weight: 700;
-    letter-spacing: 2.5px;
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 400;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: var(--text-label);
+    color: var(--text);
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 0.65rem;
     padding-bottom: 0.85rem;
     margin-bottom: 1.5rem;
     border-bottom: 1px solid var(--border);
     position: relative;
 }
 
-/* Marqueur vertical cuivré — remplace les emojis structurels */
+/* Tiret or façon section-kicker lastway.ca */
 .form-section h2::before {
     content: '';
     display: block;
     flex-shrink: 0;
-    width: 3px;
-    height: 14px;
-    background: var(--accent);
-    border-radius: 2px;
+    width: 18px;
+    height: 1.5px;
+    background: var(--gold);
 }
 
 /* Underline accent de section */
@@ -416,21 +404,20 @@ body {
     position: absolute;
     bottom: -1px; left: 0;
     width: 44px; height: 1px;
-    background: var(--accent);
+    background: var(--gold);
     opacity: 0.6;
 }
 
 /* ── Info Section ─────────────────────────────────────────────── */
 .info-section {
-    border-left: 2px solid var(--accent);
-    background: rgba(200, 104, 32, 0.03);
-    border: 1px solid var(--border-warm);
-    border-left: 2px solid var(--accent);
+    background: var(--gold-dim);
+    border: 1px solid var(--gold-border);
+    border-left: 2px solid var(--gold);
     border-radius: 0 8px 8px 0;
     padding: 1.5rem 1.5rem 1.5rem 1.8rem;
     margin-bottom: 2.5rem;
 }
-.info-section h2 { border-bottom-color: rgba(200, 104, 32, 0.14); }
+.info-section h2 { border-bottom-color: var(--gold-border); }
 
 /* ── Task List ────────────────────────────────────────────────── */
 .task-list {
@@ -442,19 +429,19 @@ body {
 .task-list li {
     position: relative;
     padding-left: 1.3rem;
-    font-size: 0.875rem;
+    font-size: 0.85rem;
     font-weight: 400;
-    color: var(--text-muted);
-    line-height: 1.65;
+    color: var(--muted);
+    line-height: 1.78;
 }
 .task-list li::before {
     content: '—';
     position: absolute;
     left: 0;
-    color: var(--accent);
+    color: var(--gold);
     font-size: 0.72rem;
-    top: 0.1em;
-    opacity: 0.7;
+    top: 0.15em;
+    opacity: 0.8;
 }
 
 /* ── Input Groups ─────────────────────────────────────────────── */
@@ -464,51 +451,55 @@ body {
     margin-bottom: 1.3rem;
 }
 .input-group label {
-    font-size: 0.82rem;
-    font-weight: 500;
-    color: var(--text-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
     margin-bottom: 0.5rem;
-    line-height: 1.45;
+    line-height: 1.5;
 }
 .input-group label small {
     display: block;
-    font-size: 0.74rem;
+    font-size: 0.7rem;
     font-weight: 400;
-    opacity: 0.7;
+    letter-spacing: 0.02em;
+    text-transform: none;
+    color: var(--dim);
+    opacity: 0.85;
     margin-top: 3px;
-    line-height: 1.4;
+    line-height: 1.5;
 }
 
 /* ── Inputs & Textareas ───────────────────────────────────────── */
 input[type="text"],
 input[type="number"],
 textarea {
-    background: var(--bg-input);
-    border: 1px solid rgba(255,255,255,0.09);
+    background: var(--surface-2);
+    border: 1px solid var(--border-strong);
     border-radius: var(--radius-input);
     padding: 0.78rem 1rem;
     color: var(--text);
-    font-family: 'Exo 2', sans-serif;
-    font-size: 0.93rem;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
     font-weight: 400;
     line-height: 1.6;
     outline: none;
     width: 100%;
     transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
-    /* Hauteur min 44px pour accessibilité touch */
     min-height: 44px;
 }
 input[type="text"]::placeholder,
 input[type="number"]::placeholder,
 textarea::placeholder {
-    color: #3C3C52;
+    color: var(--dim);
     font-weight: 400;
 }
 input:focus,
 textarea:focus {
-    border-color: rgba(200, 104, 32, 0.50);
-    background: #14141C;
-    box-shadow: 0 0 0 3px rgba(200, 104, 32, 0.08);
+    border-color: var(--gold-border);
+    background: #1a1a22;
+    box-shadow: 0 0 0 3px rgba(232, 121, 58, 0.08);
     color: var(--text);
 }
 textarea {
@@ -519,15 +510,16 @@ textarea {
 /* ── Character Counters ───────────────────────────────────────── */
 .char-counter {
     float: right;
-    font-size: 0.70rem;
-    color: var(--text-dim);
+    font-size: 0.68rem;
+    color: var(--dim);
     font-weight: 500;
+    letter-spacing: 0.04em;
     font-variant-numeric: tabular-nums;
     transition: color 0.3s;
 }
 .char-bar {
     height: 2px;
-    background: rgba(255,255,255,0.05);
+    background: rgba(255, 255, 255, 0.05);
     border-radius: 99px;
     margin-top: 6px;
     overflow: hidden;
@@ -541,23 +533,33 @@ textarea {
 }
 .char-hint {
     display: block;
-    font-size: 0.73rem;
-    color: var(--text-dim);
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+    text-transform: none;
+    color: var(--dim);
     margin-top: 5px;
 }
 .char-hint strong {
-    color: var(--text-muted);
+    color: var(--muted);
     font-weight: 600;
 }
 
 /* ── Checkbox ─────────────────────────────────────────────────── */
 .checkbox-group { margin-top: 0.4rem; }
 
-.custom-checkbox-container {
+.custom-checkbox-container,
+.input-group label.custom-checkbox-container {
     display: flex;
     align-items: flex-start;
     cursor: pointer;
     user-select: none;
+    /* Annule le style label uppercase de .input-group label */
+    text-transform: none;
+    letter-spacing: normal;
+    font-weight: 400;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 0;
 }
 .custom-checkbox-container input {
     position: absolute;
@@ -570,20 +572,20 @@ textarea {
     width: 20px; height: 20px;
     margin-top: 3px;
     margin-right: 13px;
-    background: var(--bg-input);
-    border: 1px solid rgba(255,255,255,0.10);
+    background: var(--surface-2);
+    border: 1px solid var(--border-strong);
     border-radius: 4px;
     position: relative;
     transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
 }
 .custom-checkbox-container:hover .checkmark {
-    border-color: var(--accent);
-    background: var(--accent-dim);
+    border-color: var(--gold);
+    background: var(--gold-dim);
 }
 .custom-checkbox-container input:checked ~ .checkmark {
-    background: var(--accent);
-    border-color: var(--accent);
-    box-shadow: 0 0 10px rgba(200, 104, 32, 0.35);
+    background: var(--gold);
+    border-color: var(--gold);
+    box-shadow: 0 0 10px rgba(232, 121, 58, 0.35);
 }
 .checkmark::after {
     content: '';
@@ -591,7 +593,7 @@ textarea {
     display: none;
     left: 6px; top: 2px;
     width: 5px; height: 10px;
-    border: solid #fff;
+    border: solid #080808;
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
 }
@@ -599,76 +601,76 @@ textarea {
 
 .checkbox-text-block {
     flex: 1;
-    background: rgba(255,255,255,0.022);
+    background: rgba(255, 255, 255, 0.022);
     border: 1px solid var(--border);
     border-radius: var(--radius-input);
     padding: 0.8rem 1.1rem;
-    color: var(--text-muted);
-    line-height: 1.65;
-    font-size: 0.86rem;
+    color: var(--muted);
+    line-height: 1.78;
+    font-size: 0.85rem;
     transition: border-color 0.2s, background 0.2s, color 0.2s;
 }
 .custom-checkbox-container:hover .checkbox-text-block {
-    border-color: var(--accent-border);
-    background: var(--accent-dim);
+    border-color: var(--gold-border);
+    background: var(--gold-dim);
 }
 .custom-checkbox-container input:checked ~ .checkmark ~ .checkbox-text-block {
-    border-color: rgba(200, 104, 32, 0.30);
+    border-color: rgba(232, 121, 58, 0.30);
     color: var(--text);
 }
 .checkbox-text-block strong {
     color: var(--red);
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.06em;
     font-weight: 700;
 }
 .checkbox-text {
-    color: var(--text-muted);
-    line-height: 1.65;
-    font-size: 0.86rem;
+    color: var(--muted);
+    line-height: 1.78;
+    font-size: 0.85rem;
     padding-top: 2px;
 }
 .checkbox-text strong {
     color: var(--red);
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.06em;
 }
 
 /* ── Custom Select ────────────────────────────────────────────── */
 .custom-select { position: relative; cursor: pointer; user-select: none; }
 
 .select-trigger {
-    background: var(--bg-input);
-    border: 1px solid rgba(255,255,255,0.09);
+    background: var(--surface-2);
+    border: 1px solid var(--border-strong);
     border-radius: var(--radius-input);
     padding: 0.78rem 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: var(--text-muted);
-    font-family: 'Exo 2', sans-serif;
-    font-size: 0.93rem;
+    color: var(--muted);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
     min-height: 44px;
     transition: border-color 0.2s, color 0.2s;
 }
 .custom-select.active .select-trigger {
-    border-color: rgba(200, 104, 32, 0.50);
+    border-color: var(--gold-border);
     color: var(--text);
 }
 .select-trigger .arrow {
     font-style: normal;
     font-size: 0.56rem;
-    opacity: 0.32;
-    transition: transform 0.25s, opacity 0.25s;
+    color: var(--dim);
+    transition: transform 0.25s, color 0.25s;
 }
-.custom-select.active .arrow { transform: rotate(180deg); opacity: 0.75; }
+.custom-select.active .arrow { transform: rotate(180deg); color: var(--gold); }
 
 .select-options {
     position: absolute;
     top: calc(100% + 5px); left: 0;
     width: 100%;
-    background: #111119;
-    border: 1px solid rgba(255,255,255,0.08);
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
     border-radius: 8px;
     overflow: hidden;
     z-index: 100;
@@ -676,7 +678,7 @@ textarea {
     transform: translateY(-6px);
     pointer-events: none;
     transition: opacity 0.18s ease, transform 0.18s ease;
-    box-shadow: 0 20px 55px rgba(0,0,0,0.80);
+    box-shadow: 0 20px 55px rgba(0, 0, 0, 0.80);
 }
 .custom-select.active .select-options {
     opacity: 1;
@@ -685,47 +687,44 @@ textarea {
 }
 .option {
     padding: 0.72rem 1rem;
-    font-family: 'Exo 2', sans-serif;
-    font-size: 0.90rem;
-    color: var(--text-muted);
-    border-bottom: 1px solid rgba(255,255,255,0.03);
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
     transition: background 0.15s, color 0.15s;
 }
 .option:last-child { border-bottom: none; }
-.option:hover { background: var(--accent-dim); color: var(--text); }
-.option.selected { color: var(--accent-bright); background: rgba(200, 104, 32, 0.07); }
+.option:hover { background: var(--gold-dim); color: var(--text); }
+.option.selected { color: var(--gold-bright); background: rgba(232, 121, 58, 0.07); }
 
-/* ── Primary Button ───────────────────────────────────────────── */
+/* ── Primary Button — style .btn lastway.ca ───────────────────── */
 .primary-btn {
     width: 100%;
-    padding: 1.05rem;
-    background: var(--accent);
-    color: #fff;
+    padding: 0.95rem;
+    background: var(--gold);
+    color: #080808;
     border: none;
-    border-radius: var(--radius-input);
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.63rem;
+    border-radius: 4px;
+    font-family: var(--font-body);
+    font-size: 0.77rem;
     font-weight: 700;
-    letter-spacing: 3px;
+    letter-spacing: 0.09em;
     text-transform: uppercase;
     cursor: pointer;
     position: relative;
     overflow: hidden;
     margin-top: 0.5rem;
-    /* touch target ≥44px */
     min-height: 48px;
-    transition: transform 0.18s ease, box-shadow 0.25s ease, background 0.18s ease;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
 }
 .primary-btn:hover {
     transform: translateY(-2px);
-    background: var(--accent-bright);
-    box-shadow:
-        0 10px 32px rgba(200, 104, 32, 0.42),
-        0 0 0 1px rgba(200, 104, 32, 0.22);
+    background: var(--gold-bright);
+    box-shadow: 0 14px 36px rgba(232, 121, 58, 0.32);
 }
 .primary-btn:active {
     transform: translateY(1px);
-    box-shadow: 0 4px 14px rgba(200, 104, 32, 0.22);
+    box-shadow: 0 4px 14px rgba(232, 121, 58, 0.22);
 }
 .primary-btn:disabled {
     opacity: 0.38;
@@ -735,12 +734,11 @@ textarea {
 }
 .btn-glow {
     position: absolute;
-    top: -50%; left: -50%;
-    width: 200%; height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%);
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, transparent 60%);
     pointer-events: none;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.2s ease;
 }
 .primary-btn:hover .btn-glow { opacity: 1; }
 
@@ -750,14 +748,14 @@ textarea {
     bottom: 2rem; right: 2rem;
     padding: 0.88rem 1.3rem 0.88rem 1rem;
     border-radius: 8px;
-    background: #0E0E16;
-    border: 1px solid rgba(255,255,255,0.07);
-    border-left: 2px solid var(--accent);
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-left: 2px solid var(--gold);
     color: var(--text);
-    font-family: 'Exo 2', sans-serif;
+    font-family: var(--font-body);
     font-weight: 500;
     font-size: 0.88rem;
-    box-shadow: 0 14px 45px rgba(0,0,0,0.70);
+    box-shadow: 0 14px 45px rgba(0, 0, 0, 0.70);
     z-index: 1000;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex;
@@ -765,28 +763,27 @@ textarea {
     gap: 0.85rem;
     max-width: 330px;
 }
-/* Icône toast — cercle accent, pas d'emoji */
 .toast::before {
     content: '✓';
     flex-shrink: 0;
     width: 24px; height: 24px;
     border-radius: 50%;
-    background: var(--accent);
+    background: var(--gold);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 0.65rem;
     font-weight: 800;
-    color: #fff;
+    color: #080808;
     line-height: 24px;
     text-align: center;
     font-family: sans-serif;
 }
 .toast.error {
     border-left-color: var(--red);
-    box-shadow: 0 14px 45px rgba(0,0,0,0.70);
+    box-shadow: 0 14px 45px rgba(0, 0, 0, 0.70);
 }
-.toast.error::before { content: '✕'; background: var(--red); }
+.toast.error::before { content: '✕'; background: var(--red); color: #080808; }
 
 .toast.hidden {
     display: block !important;
@@ -799,16 +796,18 @@ textarea {
 .footer {
     text-align: center;
     margin-top: 4rem;
-    color: var(--text-dim);
-    font-size: 0.66rem;
-    letter-spacing: 2.5px;
-    font-family: 'Orbitron', sans-serif;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--border);
+    color: var(--dim);
+    font-size: 0.74rem;
+    letter-spacing: 0.02em;
+    font-family: var(--font-body);
 }
 
 /* ── Hidden Utility ───────────────────────────────────────────── */
 .hidden { display: none !important; }
 
-/* ── Animations système réduit (accessibilité) ────────────────── */
+/* ── Accessibilité ────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
         animation-duration: 0.01ms !important;
@@ -821,9 +820,9 @@ textarea {
     .container    { padding: 4.5rem 1rem 4rem; }
     .glass-panel  { padding: 1.5rem 1.1rem; }
     .logo         { width: 160px; }
-    .subtitle     { font-size: 0.50rem; letter-spacing: 5px; }
-    .hud-bar      { font-size: 0.47rem; letter-spacing: 3px; }
+    .subtitle     { font-size: 0.8rem; letter-spacing: 0.3em; }
+    .hud-bar      { font-size: 0.52rem; letter-spacing: 0.12em; padding: 0 0.8rem; }
     .choice-card  { padding: 1.5rem 1.3rem 1.3rem; }
     .toast        { bottom: 1rem; right: 1rem; left: 1rem; max-width: 100%; }
-    .primary-btn  { font-size: 0.58rem; }
+    .primary-btn  { font-size: 0.72rem; }
 }
