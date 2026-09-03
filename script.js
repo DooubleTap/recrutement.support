@@ -1,37 +1,98 @@
+// api.js est chargé en async/defer : son callback onload peut arriver avant ou
+// après DOMContentLoaded. On expose donc le callback immédiatement, et le reste
+// du script attend cette promesse avant de toucher à window.turnstile.
+let resolveTurnstileReady;
+const turnstileReady = new Promise(resolve => { resolveTurnstileReady = resolve; });
+window.onTurnstileLoad = () => resolveTurnstileReady();
+
 document.addEventListener('DOMContentLoaded', () => {
     const toast = document.getElementById('toast');
 
     // =============================================
     // TURNSTILE
     // =============================================
-    let turnstileToken = null;
+    const TURNSTILE_SITEKEY = '0x4AAAAAACx5PJv1lgysPTdQ';
 
-    window.onTurnstileSuccess = function(token) {
-        turnstileToken = token;
-        // Activer les cartes
-        document.querySelectorAll('.choice-card').forEach(c => {
-            c.classList.remove('choice-card-locked');
-            c.removeAttribute('disabled');
+    // Un token Cloudflare vit 300 s. On le renouvelle au-delà de 240 s pour
+    // garder une marge sur la latence réseau et l'horloge du client.
+    const TOKEN_MAX_AGE_MS = 240000;
+
+    // Un widget par formulaire, rendu à l'ouverture de celui-ci. Turnstile ne
+    // peut ni s'afficher ni renouveler son token dans un conteneur masqué,
+    // d'où le rendu explicite plutôt que trois .cf-turnstile en auto-render.
+    const widgets = {};   // type -> { id, token, issuedAt, waiters }
+
+    function setHint(type, text, color) {
+        const el = document.getElementById('turnstileHint_' + type);
+        if (!el) return;
+        el.textContent = text;
+        el.style.color = color || '';
+    }
+
+    async function renderTurnstile(type) {
+        await turnstileReady;
+
+        const existing = widgets[type];
+        if (existing) {
+            // Déjà en place : on repart d'un token neuf à chaque ouverture.
+            existing.token    = null;
+            existing.issuedAt = 0;
+            window.turnstile.reset(existing.id);
+            return;
+        }
+
+        const w = widgets[type] = { id: null, token: null, issuedAt: 0, waiters: [] };
+
+        w.id = window.turnstile.render('#turnstile_' + type, {
+            sitekey : TURNSTILE_SITEKEY,
+            theme   : 'dark',
+            callback: (token) => {
+                w.token    = token;
+                w.issuedAt = Date.now();
+                setHint(type, '✅ Vérification réussie.', '#4ade80');
+                w.waiters.splice(0).forEach(resolve => resolve(token));
+            },
+            'expired-callback': () => {
+                w.token = null;
+                setHint(type, '⚠️ Vérification expirée — renouvellement en cours...', '#f39c12');
+            },
+            'error-callback': () => {
+                w.token = null;
+                setHint(type, '❌ Échec de la vérification. Rechargez la page.', '#e74c3c');
+                w.waiters.splice(0).forEach(resolve => resolve(null));
+            },
         });
-        document.getElementById('turnstileHint').textContent = '✅ Vérification réussie — choisissez votre formulaire.';
-        document.getElementById('turnstileHint').style.color = '#4ade80';
-    };
+    }
 
-    window.onTurnstileExpire = function() {
-        turnstileToken = null;
-        document.querySelectorAll('.choice-card').forEach(c => {
-            c.classList.add('choice-card-locked');
-            c.setAttribute('disabled', 'disabled');
+    /**
+     * Renvoie un token utilisable, ou null si le joueur doit agir.
+     * Au-delà de TOKEN_MAX_AGE_MS on force un reset et on attend le nouveau
+     * token plutôt que d'envoyer un token périmé que /api/submit rejettera.
+     */
+    function getFreshToken(type) {
+        const w = widgets[type];
+        if (!w) return Promise.resolve(null);
+
+        if (w.token && Date.now() - w.issuedAt < TOKEN_MAX_AGE_MS) {
+            return Promise.resolve(w.token);
+        }
+
+        w.token = null;
+        setHint(type, '⏳ Renouvellement de la vérification...', '#f39c12');
+        window.turnstile.reset(w.id);
+
+        return new Promise(resolve => {
+            w.waiters.push(resolve);
+            // Si Cloudflare exige une interaction, on rend la main au joueur.
+            setTimeout(() => {
+                const i = w.waiters.indexOf(resolve);
+                if (i !== -1) {
+                    w.waiters.splice(i, 1);
+                    resolve(null);
+                }
+            }, 20000);
         });
-        document.getElementById('turnstileHint').textContent = '⚠️ Vérification expirée — veuillez recommencer.';
-        document.getElementById('turnstileHint').style.color = '#f39c12';
-    };
-
-    // Bloquer les cartes au chargement (avant Turnstile)
-    document.querySelectorAll('.choice-card').forEach(c => {
-        c.classList.add('choice-card-locked');
-        c.setAttribute('disabled', 'disabled');
-    });
+    }
 
     // =============================================
     // NAVIGATION
@@ -52,6 +113,10 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('devForm').classList.remove('hidden');
             document.getElementById('pageSubtitle').textContent = 'Application Dev';
         }
+
+        // Le widget n'est rendu qu'une fois son conteneur visible.
+        renderTurnstile(type);
+
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
@@ -149,13 +214,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // =============================================
 
     // =============================================
-    // WEBHOOKS
-    // =============================================
-    const WEBHOOK_DOUANE = "https://discord.com/api/webhooks/1487984543234523146/sklJDcW8UN-ivkoWFDmLqMPl_AlekKMNlQNkI8ZVRyhl_vLTjH5JnyDDufwtc1t-c0_U";
-    const WEBHOOK_STAFF  = "https://discord.com/api/webhooks/1476521529146609815/0xzWZp25v6lvDutPiJ03_zWX616oZXzAVrLVj0sUQ5-4dMrZwAqAqel0lmM_ZgAXV3_O";
-    const WEBHOOK_DEV    = "https://discord.com/api/webhooks/1476521529146609815/0xzWZp25v6lvDutPiJ03_zWX616oZXzAVrLVj0sUQ5-4dMrZwAqAqel0lmM_ZgAXV3_O";
-
-    // =============================================
     // VALIDATION CHAR MIN
     // =============================================
     function validateMinChars(form) {
@@ -217,7 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
             timestamp: new Date().toISOString()
         };
 
-        await submitToDiscord(WEBHOOK_DOUANE, embed, btn, "ENVOYER LE FORMULAIRE DE DOUANE", document.getElementById('douaneForm'), discord);
+        await submitToDiscord('douane', embed, btn, "ENVOYER LE FORMULAIRE DE DOUANE", document.getElementById('douaneForm'), discord);
     }
 
     // =============================================
@@ -260,7 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ]
         };
 
-        await submitToDiscord(WEBHOOK_STAFF, embed, btn, "ENVOYER LA CANDIDATURE STAFF", document.getElementById('staffForm'), discord);
+        await submitToDiscord('staff', embed, btn, "ENVOYER LA CANDIDATURE STAFF", document.getElementById('staffForm'), discord);
     }
 
     // =============================================
@@ -311,25 +369,22 @@ document.addEventListener('DOMContentLoaded', () => {
             ]
         };
 
-        await submitToDiscord(WEBHOOK_DEV, embed, btn, "ENVOYER LA CANDIDATURE DEV", document.getElementById('devForm'), discord);
+        await submitToDiscord('dev', embed, btn, "ENVOYER LA CANDIDATURE DEV", document.getElementById('devForm'), discord);
     }
 
     // =============================================
     // HELPER — Envoi Discord
     // =============================================
-    async function submitToDiscord(webhookUrl, embed, btn, originalLabel, form, discordId = null) {
-        // Extraire le type depuis l'URL du webhook (on passe maintenant par /api/submit)
-        const typeMap = {
-            [WEBHOOK_DOUANE]: 'douane',
-            [WEBHOOK_STAFF]:  'staff',
-            [WEBHOOK_DEV]:    'dev',
-        };
-        const type = typeMap[webhookUrl] || 'douane';
-
-        if (!turnstileToken) {
-            alert('⚠️ Vérification anti-bot manquante. Retournez à l\'accueil et complétez le widget.');
+    async function submitToDiscord(type, embed, btn, originalLabel, form, discordId = null) {
+        const restoreBtn = () => {
             btn.disabled = false;
             btn.querySelector('span').textContent = originalLabel;
+        };
+
+        const turnstileToken = await getFreshToken(type);
+        if (!turnstileToken) {
+            alert('⚠️ Complétez la vérification anti-bot en bas du formulaire, puis renvoyez.\n\nVotre texte est conservé.');
+            restoreBtn();
             return;
         }
 
@@ -351,15 +406,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     c.style.color = '';
                 });
                 form.querySelectorAll('.char-fill').forEach(f => { f.style.width = '0%'; });
-                // Reset Turnstile (token usage unique)
-                turnstileToken = null;
-                if (window.turnstile) window.turnstile.reset();
-                document.querySelectorAll('.choice-card').forEach(c => {
-                    c.classList.add('choice-card-locked');
-                    c.setAttribute('disabled', 'disabled');
-                });
-                document.getElementById('turnstileHint').textContent = 'Complétez la vérification ci-dessus pour accéder aux formulaires.';
-                document.getElementById('turnstileHint').style.color = '';
+                // Un token Turnstile est à usage unique.
+                const w = widgets[type];
+                if (w) {
+                    w.token    = null;
+                    w.issuedAt = 0;
+                    window.turnstile.reset(w.id);
+                }
+                setHint(type, 'Complétez la vérification avant d\'envoyer.', '');
                 showLanding();
                 // Reset custom selects
                 const trigger = form.querySelector('.select-trigger span');
@@ -367,14 +421,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 const hidden  = form.querySelector('input[type="hidden"]');
                 if (hidden) hidden.value = '';
             } else {
-                alert("Erreur Discord : " + response.status);
+                // Ce statut vient de /api/submit (Vercel), pas de Discord.
+                const data = await response.json().catch(() => ({}));
+                alert(data.error || `Envoi refusé par le serveur (code ${response.status}). Réessayez dans un instant.`);
+
+                if (data.code === 'turnstile-expired') {
+                    const w = widgets[type];
+                    if (w) {
+                        w.token    = null;
+                        w.issuedAt = 0;
+                        window.turnstile.reset(w.id);
+                    }
+                }
             }
         } catch (error) {
             console.error(error);
-            alert("Erreur d'envoi : " + error.message);
+            alert("Impossible de contacter le serveur : " + error.message + "\n\nVérifiez votre connexion et réessayez.");
         } finally {
-            btn.disabled = false;
-            btn.querySelector('span').textContent = originalLabel;
+            restoreBtn();
         }
     }
 

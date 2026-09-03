@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&amp;onload=onTurnstileLoad" async defer></script>
 </head>
 
 <body>
@@ -56,16 +56,6 @@
                     <div class="choice-arrow">→</div>
                     <div class="card-glow"></div>
                 </button>
-            </div>
-            <!-- Turnstile widget -->
-            <div class="turnstile-wrapper">
-                <div class="cf-turnstile"
-                     data-sitekey="0x4AAAAAACx5PJv1lgysPTdQ"
-                     data-theme="dark"
-                     data-callback="onTurnstileSuccess"
-                     data-expired-callback="onTurnstileExpire">
-                </div>
-                <p class="turnstile-hint" id="turnstileHint">Complétez la vérification ci-dessus pour accéder aux formulaires.</p>
             </div>
         </div>
 
@@ -145,6 +135,11 @@
                 </div>
             </section>
 
+            <div class="turnstile-wrapper">
+                <div id="turnstile_douane"></div>
+                <p class="turnstile-hint" id="turnstileHint_douane">Complétez la vérification avant d'envoyer.</p>
+            </div>
+
             <button type="button" id="douaneSubmitBtn" class="primary-btn">
                 <span>ENVOYER LE FORMULAIRE DE DOUANE</span>
                 <div class="btn-glow"></div>
@@ -209,6 +204,11 @@
                     </label>
                 </div>
             </section>
+
+            <div class="turnstile-wrapper">
+                <div id="turnstile_staff"></div>
+                <p class="turnstile-hint" id="turnstileHint_staff">Complétez la vérification avant d'envoyer.</p>
+            </div>
 
             <button type="button" id="staffSubmitBtn" class="primary-btn">
                 <span>ENVOYER LA CANDIDATURE STAFF</span>
@@ -297,6 +297,11 @@
                     </label>
                 </div>
             </section>
+
+            <div class="turnstile-wrapper">
+                <div id="turnstile_dev"></div>
+                <p class="turnstile-hint" id="turnstileHint_dev">Complétez la vérification avant d'envoyer.</p>
+            </div>
 
             <button type="button" id="devSubmitBtn" class="primary-btn">
                 <span>ENVOYER LA CANDIDATURE DEV</span>

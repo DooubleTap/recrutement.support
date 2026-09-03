@@ -6,7 +6,8 @@
       "Bash(python scripts/search.py \"gaming community portal dark professional recruitment form\" --design-system -p \"LastWay RP\" -f markdown)",
       "Bash(py --version)",
       "Bash(where python *)",
-      "PowerShell(winget install *)"
+      "PowerShell(winget install *)",
+      "Bash(nslookup apps.lastway.ca)"
     ]
   }
 }
