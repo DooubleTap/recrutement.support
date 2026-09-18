@@ -168,8 +168,19 @@ export default async function handler(req, res) {
     if (!discordRes.ok) {
       const err = await discordRes.text();
       console.error('[Discord API] Erreur:', discordRes.status, err);
+
+      // Le code d'erreur Discord est renvoyé au client : sans lui, un admin ne
+      // peut pas distinguer un token invalide (401) d'un salon inaccessible
+      // (403/404) sans ouvrir les logs Vercel. Le corps Discord ne contient
+      // jamais le token du bot.
+      let code = null;
+      try { code = JSON.parse(err).code ?? null; } catch { /* corps non-JSON */ }
+
       return res.status(502).json({
-        error: "Discord a refusé la candidature. Réessayez dans quelques minutes ou contactez un administrateur.",
+        error: "Discord a refusé la candidature. Réessayez dans quelques minutes ou contactez un administrateur."
+             + ` (diagnostic : HTTP ${discordRes.status}${code ? `, code Discord ${code}` : ''})`,
+        discordStatus: discordRes.status,
+        discordCode  : code,
       });
     }
 
